@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'dashboard',
+    'recipe',
     'corsheaders',
     'rest_framework_simplejwt',
 ]
