@@ -23,11 +23,65 @@ from rest_framework import permissions
 #             return Response(serializer.data, status=status.HTTP_201_CREATED)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class RecipeListCreateView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Recipe.objects.all()
+#     serializer_class = RecipeSerializer
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_class = RecipeFilter
+    
+    
+    
+#     def get(self, request, format=None):
+#         recipes = Recipe.objects.all()
+#         serializer = RecipeSerializer(recipes, many=True)
+#         return Response({
+#             'message': 'Recipes retrieved successfully',
+#             'data': serializer.data
+#         })
+
+#     def post(self, request, format=None):
+#         serializer = RecipeSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(user=self.request.user)
+#             return Response({
+#                 'message': 'Recipe created successfully',
+#                 'data': serializer.data
+#             }, status=status.HTTP_201_CREATED)
+#         return Response({
+#             'message': 'Recipe creation failed',
+#             'errors': serializer.errors
+#         }, status=status.HTTP_400_BAD_REQUEST)
+  
 class RecipeListCreateView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
+        # Get query parameters for search and filters
+        query = request.query_params.get('query', '')
+        ingredients = request.query_params.getlist('ingredients', [])
+        cuisine = request.query_params.get('cuisine', '')
+        dietary_restrictions = request.query_params.getlist('dietary_restrictions', [])
+        max_cook_time = request.query_params.get('max_cook_time', None)
+
+        # Filter recipes based on query parameters
         recipes = Recipe.objects.all()
+
+        if query:
+            recipes = recipes.filter(title__icontains=query)
+
+        if ingredients:
+            recipes = recipes.filter(ingredients__icontains=ingredients)
+
+        if cuisine:
+            recipes = recipes.filter(cuisine__icontains=cuisine)
+
+        if dietary_restrictions:
+            recipes = recipes.filter(dietary_restrictions__icontains=dietary_restrictions)
+
+        if max_cook_time is not None:
+            recipes = recipes.filter(cook_time__lte=max_cook_time)
+
         serializer = RecipeSerializer(recipes, many=True)
         return Response({
             'message': 'Recipes retrieved successfully',
@@ -47,7 +101,7 @@ class RecipeListCreateView(APIView):
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
         
-        
+                      
 class IsRecipeAuthor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # Check if the user making the request is the author of the recipe
