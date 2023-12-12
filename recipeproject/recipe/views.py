@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Recipe
+from .models import Recipe,Category
 from .serializer import RecipeSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
@@ -98,13 +98,40 @@ class RecipeListCreateView(APIView):
 
         if max_cook_time is not None:
             recipes = recipes.filter(cook_time__lte=max_cook_time)
+            
+            
+        #  filer the recipe by category
+        # Filter by category
+        # Get category and tags for filtering
+        category = request.query_params.get('category', None)
+        tags = request.query_params.getlist('tags', [])
+        print(category)
+        if category:
+            # recipes = recipes.filter(categories__name__icontains=category)
+            recipes= recipes.filter(category__id=category)
 
+        # Filter by tags
+        if tags:
+            print(tags)
+            recipes = recipes.filter(tags__id__in=tags)
+            
+        
+        
+        
+        
+        
+        
+            
+            
         serializer = RecipeSerializer(recipes, many=True)
         return Response({
             'message': 'Recipes retrieved successfully',
             'data': serializer.data
         })
 
+    
+    
+    
     def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data)
         if serializer.is_valid():

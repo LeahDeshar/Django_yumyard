@@ -3,6 +3,14 @@ from django.db import models
 # Create your models here.
 from account.models import User
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    
+    
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
         ('Beginner', 'Beginner'),
@@ -33,6 +41,9 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
