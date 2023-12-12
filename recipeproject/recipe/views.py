@@ -6,7 +6,7 @@ from .models import Recipe
 from .serializer import RecipeSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
-
+from django.db.models import Q
 
 # class RecipeListCreateView(APIView):
 #     permission_classes = [IsAuthenticated]
@@ -70,14 +70,31 @@ class RecipeListCreateView(APIView):
         if query:
             recipes = recipes.filter(title__icontains=query)
 
-        if ingredients:
-            recipes = recipes.filter(ingredients__icontains=ingredients)
+      
+        for ingredient in ingredients:
+            recipes = recipes.filter(ingredients__icontains=ingredient)
 
         if cuisine:
             recipes = recipes.filter(cuisine__icontains=cuisine)
 
+        
         if dietary_restrictions:
-            recipes = recipes.filter(dietary_restrictions__icontains=dietary_restrictions)
+            # Ensure dietary_restrictions is a single comma-separated string
+            dietary_restrictions_str = ','.join(dietary_restrictions)
+
+            # Split the dietary_restrictions string into a list
+            dietary_restrictions_list = [item.strip() for item in dietary_restrictions_str.split(',')]
+
+            # Create a Q object to combine multiple conditions with OR
+            filter_condition = Q()
+            
+            # Check if any of the provided dietary restrictions are present in the stored list
+            for restriction in dietary_restrictions_list:
+                filter_condition |= Q(dietary_restrictions__icontains=restriction)
+
+            # Apply the filter to the queryset
+            recipes = recipes.filter(filter_condition)
+        
 
         if max_cook_time is not None:
             recipes = recipes.filter(cook_time__lte=max_cook_time)
