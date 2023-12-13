@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 from account.models import User
 
@@ -9,7 +8,8 @@ class Category(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    
+
+  
     
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
@@ -40,10 +40,26 @@ class Recipe(models.Model):
     calories = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
+    average_rating = models.FloatField(default=0)  # To store the average rating
+    total_ratings = models.IntegerField(default=0)
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
+
+
+
+class RecipeRating(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+
+class RecipeReview(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    review  = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True) 
