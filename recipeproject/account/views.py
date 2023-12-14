@@ -10,8 +10,6 @@ from django.contrib.auth import authenticate
 from .renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Profile
-# from .serializer import UserSerializer
-# # , ProfileSerializer, RecipeSerializer, SavedRecipeSerializer
 
 
 

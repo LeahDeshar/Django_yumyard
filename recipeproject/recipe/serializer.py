@@ -17,6 +17,7 @@ class RecipeReviewSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     ratings = RecipeRatingSerializer(many=True, read_only=True)
     reviews = RecipeReviewSerializer(many=True, read_only=True)
+    images = serializers.ImageField(max_length=None, use_url=True, required=False)
     class Meta:
         model = Recipe
         fields = '__all__'

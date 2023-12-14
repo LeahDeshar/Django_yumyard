@@ -106,8 +106,15 @@ class RecipeListCreateView(APIView):
     
     def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data)
+        images = request.data.pop('images', None)
+        
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            recipe = serializer.save(user=self.request.user)
+            # Save the images related to the recipe
+            if images:
+                for image in images:
+                    recipe.images.create(image=image)
+                    
             return Response({
                 'message': 'Recipe created successfully',
                 'data': serializer.data
