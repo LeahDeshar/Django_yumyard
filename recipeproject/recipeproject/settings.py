@@ -1,6 +1,21 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+import cloudinary
+import cloudinary_storage
+
+
+cloudinary.config(
+    cloud_name='dsffxncgo',
+    api_key='887724156877453',
+    api_secret='X0tF6zTCwcr9_1SmDTXdO1TO7I4'
+)
+
+# cloudinary_storage = {
+#     'CLOUD_NAME': 'dsffxncgo',
+#     'API_KEY': '887724156877453',
+#     'API_SECRET': 'X0tF6zTCwcr9_1SmDTXdO1TO7I4',
+# }
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -186,3 +201,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8000",
 ]
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
