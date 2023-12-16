@@ -319,8 +319,8 @@ class RecipeReviewView(APIView):
     
 class RecipeImageListCreateView(APIView):
     def get(self, request, user_id):
-        images = RecipeImages.objects.filter(user_id=user_id)
-        serializer = RecipeImageSerializer(images, many=True)
+        images = Recipe.objects.filter(user=user_id)
+        serializer = RecipeSerializer(images, many=True)
         return Response(serializer.data)
 
     def post(self, request, user_id):
