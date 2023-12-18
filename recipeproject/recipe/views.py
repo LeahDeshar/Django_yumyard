@@ -3,8 +3,8 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Recipe,RecipeReview,RecipeRating,RecipeImages
-from .serializer import RecipeSerializer,RecipeRatingSerializer,RecipeReviewSerializer,RecipeImageSerializer
+from .models import Recipe,RecipeReview,RecipeRating
+from .serializer import RecipeSerializer,RecipeRatingSerializer,RecipeReviewSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from django.db.models import Q,Avg
@@ -101,19 +101,14 @@ class RecipeListCreateView(APIView):
             'message': 'Recipes retrieved successfully',
             'data': serializer.data
         })
-
-    
-    
     
     def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data)
         
        
         if serializer.is_valid():
-            # images = serializer.validated_data.get('images', [])
-            # serializer.save(user=self.request.user, images=images)
-            # images = serializer.validated_data['images']
-            # serializer.save(user=self.request.user)
+            recipe = serializer.save(user=request.user)
+            
             return Response({
                 'message': 'Recipe created successfully',
                 'data': serializer.data
@@ -123,19 +118,7 @@ class RecipeListCreateView(APIView):
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
         
-# class RecipeImageView(APIView):
-#     parser_classes = (MultiPartParser, FormParser)
 
-#     def post(self, request, pk, format=None):
-#         recipe = Recipe.objects.get(pk=pk)
-#         print("recipe",recipe)
-#         serializer = RecipeSerializer(recipe, data=request.data)
-
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'message': 'Images uploaded successfully'}, status=status.HTTP_200_OK)
-
-#         return Response({'message': 'Image upload failed', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
                           
 class IsRecipeAuthor(permissions.BasePermission):
@@ -317,47 +300,41 @@ class RecipeReviewView(APIView):
             return Response({'message': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
         
     
-class RecipeImageListCreateView(APIView):
-    def get(self, request, user_id):
-        images = Recipe.objects.filter(user=user_id)
-        serializer = RecipeSerializer(images, many=True)
-        return Response(serializer.data)
+# class RecipeImageListCreateView(APIView):
+#     def get(self, request, user_id):
+#         images = Recipe.objects.filter(user=user_id)
+#         serializer = RecipeSerializer(images, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request, user_id):
-        serializer = RecipeImageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user_id=user_id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, user_id):
+#         serializer = RecipeImageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(user=user_id)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class RecipeImageRetrieveUpdateDestroyView(APIView):
-    def get_object(self, user_id, id):
-        try:
-            return RecipeImages.objects.get(user_id=user_id, id=id)
-        except RecipeImages.DoesNotExist:
-            raise Http404
+# class RecipeImageRetrieveUpdateDestroyView(APIView):
+#     def get_object(self, user_id, id):
+#         try:
+#             return RecipeImages.objects.get(user_id=user_id, id=id)
+#         except RecipeImages.DoesNotExist:
+#             raise Http404
 
-    def get(self, request, user_id, id):
-        image = self.get_object(user_id, id)
-        serializer = RecipeImageSerializer(image)
-        return Response(serializer.data)
+#     def get(self, request, user_id, id):
+#         image = self.get_object(user_id, id)
+#         serializer = RecipeImageSerializer(image)
+#         return Response(serializer.data)
 
-    def put(self, request, user_id, id):
-        image = self.get_object(user_id, id)
-        serializer = RecipeImageSerializer(image, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, user_id, id):
+#         image = self.get_object(user_id, id)
+#         serializer = RecipeImageSerializer(image, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, user_id, id):
-        image = self.get_object(user_id, id)
-        image.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request, user_id, id):
+#         image = self.get_object(user_id, id)
+#         image.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class RecipeImageView(APIView):
-    def get(self, request, user_id, recipe_id=None):
-        if recipe_id is not None:
-            return RecipeImageRetrieveUpdateDestroyView.as_view()(request, user_id, recipe_id)
-        else:
-            return RecipeImageListCreateView.as_view()(request, user_id)

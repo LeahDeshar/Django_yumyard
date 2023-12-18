@@ -9,11 +9,7 @@ class Category(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=255)
     
-class RecipeImages(models.Model):
-    images = CloudinaryField('images')
-    # images = CloudinaryField('images', blank=True, null=True)
-    
-    # images = models.ManyToManyField(CloudinaryField('images'), blank=True)
+
     
 class Recipe(models.Model):
     DIFFICULTY_CHOICES = [
@@ -52,12 +48,14 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     
-    # images = models.ForeignKey(RecipeImages, on_delete=models.SET_NULL, null=True, blank=True)
-    images = models.ManyToManyField(RecipeImages, blank=True)
+   
+    image = CloudinaryField('image', blank=True, null=True)
     
 
     def __str__(self):
         return self.title
+
+
 
 
 
