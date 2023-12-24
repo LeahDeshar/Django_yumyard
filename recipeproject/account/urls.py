@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserRegistrationView,UserLoginView,UserProfileView, ProfileCreateView, ProfileDetailView, ProfileUpdateView, ProfileDeleteView,UserChangePasswordView,SendPasswordResetEmailView,UserPasswordResetView
+from .views import UserRegistrationView,UserLoginView,UserProfileView, ProfileCreateView, ProfileDetailView, ProfileUpdateView, ProfileDeleteView,UserChangePasswordView,SendPasswordResetEmailView,UserPasswordResetView,FollowUser,UnfollowUser
 
 
 urlpatterns = [
@@ -26,5 +26,6 @@ urlpatterns = [
     
     # path('logout/', logout,name="logout")
     
-    
+    path('api/follow/<int:user_id>/', FollowUser.as_view(), name='follow_user'),
+    path('api/unfollow/<int:user_id>/', UnfollowUser.as_view(), name='unfollow_user'),
 ]

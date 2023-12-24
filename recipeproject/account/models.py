@@ -67,8 +67,17 @@ class User(AbstractBaseUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.PositiveIntegerField(default=0)
-    following = models.PositiveIntegerField(default=0)
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='following')
     favorite_cuisine = models.CharField(max_length=50, blank=True)
     dietary_restrictions = models.JSONField(default=list)
     allergies = models.JSONField(default=list)
+
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following_set')
+    following = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followers_set')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['follower', 'following']
