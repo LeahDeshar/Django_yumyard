@@ -67,7 +67,7 @@ class User(AbstractBaseUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='following')
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='following',blank=True)
     favorite_cuisine = models.CharField(max_length=50, blank=True)
     dietary_restrictions = models.JSONField(default=list)
     allergies = models.JSONField(default=list)

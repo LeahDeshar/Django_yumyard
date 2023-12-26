@@ -9,7 +9,7 @@ from .serializer import UserSerializer,UserLoginSerializer,ProfileSerializer,Use
 from django.contrib.auth import authenticate
 from .renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Profile
+from .models import Profile,User
 
 
 
@@ -151,8 +151,10 @@ class FollowUser(APIView):
 
     def post(self, request, user_id):
         try:
-            target_user = UserSerializer.objects.get(pk=user_id)
-        except UserSerializer.DoesNotExist:
+            print(user_id)
+            target_user = User.objects.get(pk=user_id)
+            print(target_user)
+        except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         if request.user.profile.is_following(target_user):
