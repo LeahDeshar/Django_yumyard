@@ -19,10 +19,9 @@ function MainInput({
   return (
     <View
       className={`${
-        noBorder ? "" : "border-primary border-2 "
-      } flex-row items-center justify-center overflow-hidden rounded-xl ${
-        my0 ? "my-0" : "my-2"
-      } ${otherProps.clearButtonMode ? "pr-2" : ""}`}
+        noBorder ? "" : "bg-white "
+      } flex-row items-center justify-center overflow-hidden `}
+      style={{ borderRadius: 27 }}
     >
       {icon && (
         <View className="ml-3">

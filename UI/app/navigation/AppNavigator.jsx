@@ -20,7 +20,7 @@ export default function AppNavigator() {
         animation,
       }}
     >
-      <Stack.Screen component={HomeTabNavigator} name={routes.HOME_TAB} />
+      <Stack.Screen component={HomeTabNavigator} name={"home"} />
       <Stack.Screen component={Register} name={"Register"} />
       <Stack.Screen component={Login} name={"Login"} />
       <Stack.Screen component={Test} name={"Test"} />

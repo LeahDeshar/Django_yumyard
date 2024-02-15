@@ -46,6 +46,7 @@ export default function HomeTabNavigator() {
         options={{
           title: "YumYard",
           tabBarIcon: tabHistoryIcon,
+          headerShown: false,
         }}
       />
       <Tab.Screen

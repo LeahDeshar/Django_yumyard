@@ -26,6 +26,7 @@ export default function Screen({
 
   const internet =
     netInfo.type !== "unknown" && netInfo.isInternetReachable === false;
+  // const morePaddingTop = true;
   const morePaddingTop = internet && !internet;
   return (
     <SafeAreaOnCondition
