@@ -28,6 +28,9 @@ const tabHistoryIcon = ({ color, size }) => (
 const tabOfferIcon = ({ color, size }) => (
   <MaterialCommunityIcons color={color} name="shopping" size={size} />
 );
+const tabHomeIcon = ({ color, size }) => (
+  <MaterialCommunityIcons color={color} name="home" size={size} />
+);
 
 export default function HomeTabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -44,8 +47,8 @@ export default function HomeTabNavigator() {
         component={MainScreen}
         name={routes.HOME_TAB}
         options={{
-          title: "YumYard",
-          tabBarIcon: tabHistoryIcon,
+          title: "Home",
+          tabBarIcon: tabHomeIcon,
           headerShown: false,
         }}
       />
