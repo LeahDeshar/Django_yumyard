@@ -13,6 +13,7 @@ export default function AppButton({
   style,
   disabled = false,
   icon,
+  isImage = false,
 }) {
   return (
     <TouchableOpacity
@@ -22,17 +23,21 @@ export default function AppButton({
       style={style}
       onPress={disabled ? undefined : onPress}
     >
-      <Image
-        source={require("../assets/category/1.png")}
-        style={{
-          width: 55,
-          height: 50,
-          position: "absolute",
-          right: 95,
-        }}
-      />
+      {isImage && (
+        <Image
+          source={require("../assets/category/1.png")}
+          style={{
+            width: 55,
+            height: 50,
+            position: "absolute",
+            right: 95,
+          }}
+        />
+      )}
       <AppText
-        className={`text-center font-bold text-sm uppercase ${textColor} pl-4`}
+        className={`text-center font-bold text-sm uppercase ${textColor} ${
+          isImage && "pl-4"
+        }`}
       >
         {title}
       </AppText>

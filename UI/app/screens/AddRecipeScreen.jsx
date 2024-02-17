@@ -1,8 +1,11 @@
 import { View, Text, Image, RefreshControl } from "react-native";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import colors from "../config/colors";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
+import ImageInput from "../components/ImageInput";
 
 const AddRecipeScreen = () => {
   const BottomRef = useRef(null);
@@ -50,6 +53,7 @@ const AddRecipeScreen = () => {
           <AppButton
             title="Add Recipe"
             className={"px-6"}
+            isImage={true}
             onPress={handlePresentModalPress}
           />
         </View>
@@ -64,11 +68,68 @@ const AddRecipeScreen = () => {
         </Text>
       </View>
 
-      <BottomSheetModal ref={BottomRef} index={0} snapPoints={[250]}>
-        <Text>Hi</Text>
+      <BottomSheetModal
+        handleIndicatorStyle={{
+          display: "none",
+        }}
+        handleStyle={{
+          display: "none",
+        }}
+        ref={BottomRef}
+        index={0}
+        snapPoints={[860]}
+        backgroundStyle={{
+          backgroundColor: colors.lightGray2,
+        }}
+      >
+        <RecipeAddHeader />
+        <RecipeAddBody />
       </BottomSheetModal>
     </Screen>
   );
 };
 
 export default AddRecipeScreen;
+
+const RecipeAddHeader = () => {
+  return (
+    <View>
+      <View className={"flex-row justify-between items-center mx-5 "}>
+        <Entypo name="cross" size={29} color={colors.primary} />
+        <View className={"flex-row items-center"}>
+          <AppButton
+            title="Save"
+            className={"px-6 mr-3"}
+            color={"bg-prim"}
+            textColor="text-white"
+          />
+          <MaterialCommunityIcons
+            name="dots-horizontal"
+            size={24}
+            color={colors.primary}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const RecipeAddBody = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (image) => {
+    setSelectedImage(image);
+  };
+  return (
+    <View>
+      {/* <ImageInput
+        onImageChange={handleImageChange}
+        imageAsset={selectedImage}
+      /> */}
+      <ImageInput
+        onImageChange={handleImageChange}
+        imageAsset={selectedImage}
+      />
+    </View>
+  );
+};
