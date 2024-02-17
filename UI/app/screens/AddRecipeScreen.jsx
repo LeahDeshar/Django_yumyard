@@ -7,6 +7,7 @@ import {
   PanResponder,
   Animated,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import Screen from "../components/Screen";
@@ -17,12 +18,13 @@ import {
   MaterialCommunityIcons,
   Entypo,
   MaterialIcons,
+  AntDesign,
 } from "@expo/vector-icons";
 import ImageInput from "../components/ImageInput";
 import AppTextInput from "../components/AppTextInput";
 import { ListItemSeparator } from "../components/lists";
 import { StyleSheet } from "react-native";
-
+import DraggableFlatList from "react-native-draggable-flatlist";
 const AddRecipeScreen = () => {
   const BottomRef = useRef(null);
 
@@ -99,7 +101,9 @@ const AddRecipeScreen = () => {
         }}
       >
         <RecipeAddHeader />
-        <RecipeAddBody />
+        <ScrollView className={"mb-10"}>
+          <RecipeAddBody />
+        </ScrollView>
       </BottomSheetModal>
     </Screen>
   );
@@ -111,11 +115,12 @@ const RecipeAddHeader = () => {
   return (
     <View>
       <View className={"flex-row justify-between items-center mx-5 "}>
-        <Entypo name="cross" size={29} color={colors.primary} />
+        <AntDesign name="close" size={25} color={colors.primary} />
+
         <View className={"flex-row items-center"}>
           <AppButton
             title="Save"
-            className={"px-6 mr-3"}
+            className={"px-6  mr-3"}
             color={"bg-prim"}
             textColor="text-white"
           />
@@ -136,12 +141,24 @@ const RecipeAddBody = () => {
   const handleImageChange = (image) => {
     setSelectedImage(image);
   };
+  const [ingredients, setIngredients] = useState([
+    { key: "item1", label: "Enter Ingredient 1" },
+    { key: "item2", label: "Enter Ingredient 2" },
+  ]);
+  const addIngredient = () => {
+    const newKey = `item${ingredients.length + 1}`;
+    setIngredients([
+      ...ingredients,
+      { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
+    ]);
+  };
   return (
     <View>
       <ImageInput
         onImageChange={handleImageChange}
         imageAsset={selectedImage}
       />
+
       <View className={"px-5 bg-lightGray pb-5"}>
         <View className={"pt-3"}>
           <TextInput
@@ -181,10 +198,54 @@ const RecipeAddBody = () => {
           </View>
         </View>
       </View>
+
       <View
-        className={"mt-3 pt-3 px-5 bg-lightGray pb-5"}
-        style={{ height: 300 }}
-      ></View>
+        className={"mt-3 py-5 px-5 bg-lightGray pb-5"}
+        // style={{ height: 320 }}
+      >
+        <View className={"flex-row items-center"}>
+          <Text className={"text-lg font-semibold pl-1 mr-4"}>Ingredients</Text>
+          <TouchableOpacity onPress={addIngredient}>
+            <Entypo name="add-to-list" size={20} color="black" />
+          </TouchableOpacity>
+        </View>
+
+        <SortableList data={ingredients} setData={setIngredients} />
+      </View>
     </View>
+  );
+};
+const SortableList = ({ data, setData }) => {
+  const renderItem = ({ item, index, drag, isActive }) => {
+    return (
+      <View className={"flex-row justify-between items-center py-2"}>
+        <AntDesign name="close" size={21} color="black" />
+        <View className="w-80 ">
+          <TextInput placeholder={item.label} className={"pt-3 pb-1 my-2"} />
+          <ListItemSeparator color={isActive ? colors.primary : colors.black} />
+        </View>
+        <MaterialIcons
+          name="drag-handle"
+          size={28}
+          color="black"
+          onLongPress={drag}
+        />
+      </View>
+    );
+  };
+
+  const onDragEnd = ({ data: newData }) => {
+    setData(newData);
+  };
+
+  return (
+    <DraggableFlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={(item) => `draggable-item-${item.key}`}
+      onDragEnd={onDragEnd}
+      scrollEnabled={false}
+      // className={"py-10"}
+    />
   );
 };

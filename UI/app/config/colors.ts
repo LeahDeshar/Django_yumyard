@@ -14,4 +14,5 @@ export default {
   iosBackground: "#f2f2f6",
   green: "green",
   yellow: "#FBC02D",
+  opacity: "#ffffff51",
 };
