@@ -4,9 +4,10 @@ enum routes {
   SETTINGS = "Settings",
   HISTORY = "History",
   CHAT = "Chat",
-  OFFERS = "Offers",
+  SEARCH = "Search",
   REGISTER = "Register",
   LOGIN = "Login",
+  RECIPE = "Recipe",
 }
 
 export default routes;

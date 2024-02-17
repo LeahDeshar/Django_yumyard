@@ -5,31 +5,30 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import routes from "./routes";
 import defaultStyles from "../config/styles";
 // import HomeScreen from "../screens/HomeScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+// import SettingsScreen from "../screens/SettingsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import colors from "../config/colors";
-import OffersScreen from "../screens/OffersScreen";
 import ChatScreen from "../screens/ChatScreen";
 import MainScreen from "../screens/MainScreen";
 import AccountScreen from "../screens/AccountScreen";
+import Test from "../screens/Test";
+import AddRecipeScreen from "../screens/AddRecipeScreen";
 
-const tabToolsIcon = ({ color, size }) => (
-  <MaterialCommunityIcons color={color} name="car" size={size} />
+const tabProfileIcon = ({ color, size }) => (
+  <Ionicons name="person-outline" size={size} color={color} />
 );
-
-const tabSettingsIcon = ({ color, size }) => (
-  <Ionicons name="md-settings-sharp" size={size} color={color} />
-);
-
 const tabHistoryIcon = ({ color, size }) => (
-  <MaterialCommunityIcons color={color} name="history" size={size} />
+  <MaterialCommunityIcons color={color} name="heart-outline" size={size} />
 );
 
-const tabOfferIcon = ({ color, size }) => (
-  <MaterialCommunityIcons color={color} name="shopping" size={size} />
+const tabSearchIcon = ({ color, size }) => (
+  <Ionicons color={color} name="search" size={size} />
 );
 const tabHomeIcon = ({ color, size }) => (
-  <MaterialCommunityIcons color={color} name="home" size={size} />
+  <MaterialCommunityIcons color={color} name="home-outline" size={size} />
+);
+const tabAddRecipeIcon = ({ color, size }) => (
+  <MaterialCommunityIcons color={color} name="plus-box-outline" size={size} />
 );
 
 export default function HomeTabNavigator() {
@@ -53,38 +52,48 @@ export default function HomeTabNavigator() {
         }}
       />
       <Tab.Screen
-        component={HistoryScreen}
-        name={routes.HISTORY}
+        component={Test}
+        name={routes.SEARCH}
         options={{
-          title: "History",
-          tabBarIcon: tabHistoryIcon,
+          title: "Search",
+          tabBarIcon: tabSearchIcon,
+          headerShown: false,
+        }}
+      />
+
+      <Tab.Screen
+        component={AddRecipeScreen}
+        name={routes.RECIPE}
+        options={{
+          title: "Recipe",
+          tabBarIcon: tabAddRecipeIcon,
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        component={OffersScreen}
-        name={routes.OFFERS}
+        component={HistoryScreen}
+        name={routes.HISTORY}
         options={{
-          title: "Promos",
-          headerTitle: "Offers and Promos",
-          tabBarIcon: tabOfferIcon,
+          title: "Saved",
+          tabBarIcon: tabHistoryIcon,
         }}
       />
       <Tab.Screen
         component={AccountScreen}
         name={routes.SETTINGS}
         options={{
-          title: "Settings",
-          tabBarIcon: tabSettingsIcon,
+          title: "Profile",
+          tabBarIcon: tabProfileIcon,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         component={ChatScreen}
         name={routes.CHAT}
         options={{
           title: "Chat",
           tabBarIcon: tabSettingsIcon,
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

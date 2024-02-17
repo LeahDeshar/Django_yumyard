@@ -1,7 +1,6 @@
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
-import AppLayout from "../layout/AppLayout";
 import { useNavigation } from "@react-navigation/native";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";

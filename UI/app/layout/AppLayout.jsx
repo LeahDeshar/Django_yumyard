@@ -2,9 +2,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import OffersScreen from "../screens/OffersScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
+import Test from "../screens/Test";
 
 //Screen names
 const homeName = "Home";
@@ -43,7 +43,7 @@ function AppLayout() {
       }}
     >
       <Tab.Screen name={homeName} component={NotificationsScreen} />
-      <Tab.Screen name={detailsName} component={OffersScreen} />
+      <Tab.Screen name={detailsName} component={Test} />
       <Tab.Screen name={settingsName} component={SettingsScreen} />
     </Tab.Navigator>
     // </NavigationContainer>
