@@ -61,6 +61,7 @@
     "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.1",
+    "react-native-virtualized-view": "^1.0.0",
     "react-native-web": "~0.19.9",
     "react-native-webview": "13.2.2",
     "shorthash2": "^1.0.3",

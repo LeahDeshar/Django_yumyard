@@ -7,8 +7,9 @@ import {
   PanResponder,
   Animated,
   TouchableOpacity,
-  ScrollView,
+  ActionSheetIOS,
 } from "react-native";
+import { ScrollView } from "react-native-virtualized-view";
 import React, { useRef, useState } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
@@ -114,10 +115,40 @@ const AddRecipeScreen = () => {
 export default AddRecipeScreen;
 
 const RecipeAddHeader = () => {
+  const handlePress = () => {
+    // Define options for the ActionSheet
+    const options = ["Save and Exit", "Discard Changes", "Cancel"];
+
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: options,
+        cancelButtonIndex: options.length - 1,
+      },
+      (buttonIndex) => {
+        // Handle the selected option
+        switch (buttonIndex) {
+          case 0:
+            // Option 1 selected
+            break;
+          case 1:
+            // Option 2 selected
+            break;
+          case 2:
+            // Option 3 selected
+            break;
+          default:
+            // Cancel or tap outside the ActionSheet
+            break;
+        }
+      }
+    );
+  };
   return (
     <View>
       <View className={"flex-row justify-between items-center mx-5 "}>
-        <AntDesign name="close" size={25} color={colors.primary} />
+        <TouchableOpacity onPress={handlePress}>
+          <AntDesign name="close" size={25} color={colors.primary} />
+        </TouchableOpacity>
 
         <View className={"flex-row items-center"}>
           <AppButton
@@ -267,6 +298,8 @@ const Method = () => {
   };
 
   const renderItem = ({ item, index, drag, isActive }) => {
+    // const addNumber = index + 1;
+    const addNumber = steps.findIndex((step) => step.key === item.key) + 1;
     return (
       <>
         <View
@@ -281,7 +314,7 @@ const Method = () => {
               borderRadius: 25,
             }}
           >
-            <Text className={" text-white"}>1</Text>
+            <Text className={" text-white"}>{addNumber}</Text>
           </View>
           <View className="w-80 ">
             <TextInput
@@ -346,7 +379,7 @@ const Method = () => {
       </View>
       <TouchableOpacity
         onPress={addStep}
-        className={"flex-row items-center justify-center mt-3 "}
+        className={"flex-row items-center justify-center mt-8 my-5"}
       >
         <Ionicons name="add-outline" size={24} color="black" />
 
