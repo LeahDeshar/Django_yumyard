@@ -168,7 +168,7 @@ import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Make sure you import necessary icons from Expo package
 import colors from "../config/colors";
 
-function YourComponent() {
+function ImageInput({ isMethod = false }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (image) => {
@@ -237,39 +237,52 @@ function YourComponent() {
   const content = selectedImage ? (
     <Image
       source={{ uri: selectedImage }}
-      style={{ height: 300, width: "100%" }}
+      style={{
+        height: isMethod ? 150 : 300,
+        borderRadius: isMethod && 25,
+        width: "100%",
+        borderWidth: 2,
+      }}
     />
   ) : (
     <View
-      className={"justify-center align-center bg-grey"}
-      style={{ width: "100%", height: 200 }}
+      className={` justify-center align-center bg-grey`}
+      style={{
+        width: "100%",
+        height: isMethod ? 150 : 200,
+        borderRadius: isMethod && 25,
+      }}
     >
       <MaterialCommunityIcons
         name="camera"
-        size={100}
+        size={isMethod ? 90 : 100}
         style={{
           textAlign: "center",
           color: colors.secondary,
         }}
       />
-      <Text className={"text-center text-white font-semibold text-2xl"}>
-        Upload recipe photo
-      </Text>
-      <Text className={"text-center text-white"}>
-        Inspire others to cook your dish
-      </Text>
+      {!isMethod && (
+        <>
+          <Text className={"text-center text-white font-semibold text-2xl"}>
+            Upload recipe photo
+          </Text>
+          <Text className={"text-center text-white"}>
+            Inspire others to cook your dish
+          </Text>
+        </>
+      )}
     </View>
   );
 
   return (
     <TouchableOpacity
       style={{
-        height: 200,
+        // height: !isMethod && 200,
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        backgroundColor: "lightgray",
+        // backgroundColor: "lightgray",
       }}
       onPress={handleSelectImage}
     >
@@ -278,4 +291,4 @@ function YourComponent() {
   );
 }
 
-export default YourComponent;
+export default ImageInput;

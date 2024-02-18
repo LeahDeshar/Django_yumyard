@@ -19,6 +19,7 @@ import {
   Entypo,
   MaterialIcons,
   AntDesign,
+  Ionicons,
 } from "@expo/vector-icons";
 import ImageInput from "../components/ImageInput";
 import AppTextInput from "../components/AppTextInput";
@@ -103,6 +104,7 @@ const AddRecipeScreen = () => {
         <RecipeAddHeader />
         <ScrollView className={"mb-10"}>
           <RecipeAddBody />
+          <Method />
         </ScrollView>
       </BottomSheetModal>
     </Screen>
@@ -247,5 +249,109 @@ const SortableList = ({ data, setData }) => {
       scrollEnabled={false}
       // className={"py-10"}
     />
+  );
+};
+
+const Method = () => {
+  const [steps, setSteps] = useState([
+    { key: "step1", description: "Step 1" },
+    { key: "step2", description: "Step 2" },
+  ]);
+
+  const addStep = () => {
+    const newKey = `step${steps.length + 1}`;
+    setSteps([
+      ...steps,
+      { key: newKey, description: `Step ${steps.length + 1}` },
+    ]);
+  };
+
+  const renderItem = ({ item, index, drag, isActive }) => {
+    return (
+      <>
+        <View
+          className={"flex-row justify-between items-center py-2  bg-lightGray"}
+        >
+          <View
+            style={{
+              backgroundColor: colors.black,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+
+              borderRadius: 25,
+            }}
+          >
+            <Text className={" text-white"}>1</Text>
+          </View>
+          <View className="w-80 ">
+            <TextInput
+              placeholder={item.description}
+              className={"pt-3 pb-1 my-2 pl-3"}
+            />
+            <ListItemSeparator
+              color={isActive ? colors.primary : colors.black}
+            />
+          </View>
+          <View className={" justify-center"}>
+            <AntDesign
+              name="close"
+              size={25}
+              color="black"
+              style={{
+                top: 10,
+              }}
+            />
+            <MaterialIcons
+              name="drag-handle"
+              size={25}
+              color="black"
+              onLongPress={drag}
+              style={{
+                top: 40,
+              }}
+            />
+          </View>
+        </View>
+        <View className={"self-start  w-36"} style={{ borderRadius: 25 }}>
+          <ImageInput
+            isMethod
+            onImageChange={handleImageChange}
+            imageAsset={selectedImage}
+          />
+        </View>
+      </>
+    );
+  };
+  const onDragEnd = ({ data: newData }) => {
+    console.log(newData);
+    setSteps(newData);
+  };
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (image) => {
+    setSelectedImage(image);
+  };
+
+  return (
+    <View className={"mt-3 bg-lightGray pl-3 py-5"}>
+      <Text className={"text-lg font-semibold pl-5"}>Method</Text>
+      <View className={"mx-5"}>
+        <DraggableFlatList
+          data={steps}
+          renderItem={renderItem}
+          keyExtractor={(item) => `draggable-item-${item.key}`}
+          onDragEnd={onDragEnd}
+        />
+      </View>
+      <TouchableOpacity
+        onPress={addStep}
+        className={"flex-row items-center justify-center mt-3 "}
+      >
+        <Ionicons name="add-outline" size={24} color="black" />
+
+        <Text className={" ml-1 text-lg font-semibold"}>STEP</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
