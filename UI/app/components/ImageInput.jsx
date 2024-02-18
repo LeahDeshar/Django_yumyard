@@ -238,10 +238,9 @@ function ImageInput({ isMethod = false }) {
     <Image
       source={{ uri: selectedImage }}
       style={{
-        height: isMethod ? 150 : 300,
+        height: isMethod ? 150 : 200,
         borderRadius: isMethod && 25,
         width: "100%",
-        borderWidth: 2,
       }}
     />
   ) : (
