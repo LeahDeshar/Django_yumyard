@@ -168,7 +168,7 @@ import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Make sure you import necessary icons from Expo package
 import colors from "../config/colors";
 
-function ImageInput({ isMethod = false }) {
+function ImageInput({ isMethod = false, isProfile = false }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (image) => {
@@ -238,29 +238,30 @@ function ImageInput({ isMethod = false }) {
     <Image
       source={{ uri: selectedImage }}
       style={{
-        height: isMethod ? 150 : 200,
-        borderRadius: isMethod && 25,
+        height: isMethod ? 150 : isProfile ? 100 : 200,
+        borderRadius: isMethod ? 25 : isProfile ? 150 : 10,
         width: "100%",
       }}
     />
   ) : (
     <View
-      className={` justify-center align-center bg-grey`}
+      className={` ${"justify-center align-center "} bg-grey 
+      }`}
       style={{
         width: "100%",
-        height: isMethod ? 150 : 200,
-        borderRadius: isMethod && 25,
+        height: isMethod ? 150 : isProfile ? 130 : 200,
+        borderRadius: isMethod ? 25 : isProfile ? 250 : 0,
       }}
     >
       <MaterialCommunityIcons
         name="camera"
-        size={isMethod ? 90 : 100}
+        size={isMethod ? 90 : isProfile ? 75 : 100}
         style={{
           textAlign: "center",
           color: colors.secondary,
         }}
       />
-      {!isMethod && (
+      {!isMethod && !isProfile ? (
         <>
           <Text className={"text-center text-white font-semibold text-2xl"}>
             Upload recipe photo
@@ -269,20 +270,21 @@ function ImageInput({ isMethod = false }) {
             Inspire others to cook your dish
           </Text>
         </>
-      )}
+      ) : null}
     </View>
   );
 
   return (
     <TouchableOpacity
-      style={{
-        // height: !isMethod && 200,
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        // backgroundColor: "lightgray",
-      }}
+      className={` ${
+        isProfile ? "w-24" : "justify-center items-center w-full"
+      }  overflow-hidden `}
+      // style={{
+      //   width: "100%",
+      //   alignItems: "center",
+      //   justifyContent: "center",
+      //   overflow: "hidden",
+      // }}
       onPress={handleSelectImage}
     >
       {content}

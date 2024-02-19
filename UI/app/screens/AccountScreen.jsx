@@ -12,12 +12,16 @@ import AppListItems from "../components/AppListItems";
 import AppButton from "../components/AppButton";
 import AppSwitch from "../components/AppSwitch";
 import { useBearStore } from "../store";
+import ImageInput from "../components/ImageInput";
 
 export default function AccountScreen({ route, navigation }) {
   const [artificialLoading, setArtificialLoading] = useState(false);
 
-  const riderMode = useBearStore((state) => state.riderMode);
-  const setRiderMode = useBearStore((state) => state.setRiderMode);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (image) => {
+    setSelectedImage(image);
+  };
 
   return (
     <>
@@ -32,36 +36,31 @@ export default function AccountScreen({ route, navigation }) {
           <RefreshControl refreshing={false} onRefresh={() => {}} />
         }
       >
-        <View className="flex-1">
-          <View className="mt-3 items-center">
-            <AppImage
-              noCache
-              source={{
-                uri: `https://picsum.photos/200/`,
-              }}
-              alt={`Avatar`}
-              className="mb-4 h-24 w-24 rounded-full"
+        <View>
+          <View className="mt-3 items-center flex-row ">
+            <ImageInput
+              isProfile
+              onImageChange={handleImageChange}
+              imageAsset={selectedImage}
             />
-            <AppText className="text-3xl font-bold">Ram Bahadur</AppText>
+            <View className={"ml-4"}>
+              <AppText className="text-3xl font-bold ml-3">
+                George Smith
+              </AppText>
+              <AppButton
+                title="Edit Profile"
+                className={"w-36 ml-3 "}
+                color="bg-prim"
+                textColor="text-white"
+                onPress={() => navigation.navigate("Edit")}
+              />
+            </View>
           </View>
           <AppListItems
             items={[
               {
                 name: "Your Account",
                 options: [
-                  {
-                    dropdown: true,
-                    title: "Rider Mode",
-                    subTitle: (
-                      <AppSwitch
-                        label="Rider Mode"
-                        value={riderMode === true}
-                        onValueChange={(newValue) => {
-                          setRiderMode(newValue);
-                        }}
-                      />
-                    ),
-                  },
                   {
                     title: "Personal Information",
                     onPress: () => {},
@@ -75,11 +74,11 @@ export default function AccountScreen({ route, navigation }) {
                     onPress: () => {},
                   },
                   {
-                    title: "Preferred Gender",
+                    title: "Change Password",
                     onPress: () => {},
                   },
                   {
-                    title: "Save Locations",
+                    title: "Change Theme",
                     onPress: () => {},
                   },
                 ],
@@ -89,6 +88,10 @@ export default function AccountScreen({ route, navigation }) {
                 options: [
                   {
                     title: "Notification",
+                    onPress: () => {},
+                  },
+                  {
+                    title: "Logout",
                     onPress: () => {},
                   },
                   {
