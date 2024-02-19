@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RefreshControl, View } from "react-native";
+import { Image, RefreshControl, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -55,6 +55,16 @@ export default function AccountScreen({ route, navigation }) {
                 onPress={() => navigation.navigate("Edit")}
               />
             </View>
+          </View>
+          <View className={"mt-5"}>
+            <Image
+              source={require("../assets/advChef.png")}
+              style={{
+                width: "100%",
+                resizeMode: "contain",
+                height: 150,
+              }}
+            />
           </View>
           <AppListItems
             items={[

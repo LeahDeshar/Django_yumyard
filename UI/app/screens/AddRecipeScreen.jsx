@@ -102,7 +102,7 @@ const AddRecipeScreen = () => {
           backgroundColor: colors.lightGray2,
         }}
       >
-        <RecipeAddHeader />
+        <RecipeAddHeader onCancel={handleCloseModalPress} />
         <ScrollView className={"mb-10"}>
           <RecipeAddBody />
           <Method />
@@ -114,7 +114,7 @@ const AddRecipeScreen = () => {
 
 export default AddRecipeScreen;
 
-const RecipeAddHeader = () => {
+const RecipeAddHeader = ({ onCancel }) => {
   const handlePress = () => {
     // Define options for the ActionSheet
     const options = ["Save and Exit", "Discard Changes", "Cancel"];
@@ -128,10 +128,10 @@ const RecipeAddHeader = () => {
         // Handle the selected option
         switch (buttonIndex) {
           case 0:
-            // Option 1 selected
+            onCancel();
             break;
           case 1:
-            // Option 2 selected
+            onCancel();
             break;
           case 2:
             // Option 3 selected
@@ -167,7 +167,6 @@ const RecipeAddHeader = () => {
     </View>
   );
 };
-
 const RecipeAddBody = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -282,7 +281,6 @@ const SortableList = ({ data, setData }) => {
     />
   );
 };
-
 const Method = () => {
   const [steps, setSteps] = useState([
     { key: "step1", description: "Step 1" },
