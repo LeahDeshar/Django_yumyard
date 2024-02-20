@@ -10,7 +10,7 @@ import {
   ActionSheetIOS,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -27,6 +27,8 @@ import AppTextInput from "../components/AppTextInput";
 import { ListItemSeparator } from "../components/lists";
 import { StyleSheet } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { useDispatch } from "react-redux";
+import { addNewRecipeToList } from "../store/recipeReducer";
 const AddRecipeScreen = () => {
   const BottomRef = useRef(null);
 
@@ -36,6 +38,13 @@ const AddRecipeScreen = () => {
   const handleCloseModalPress = () => {
     BottomRef.current.close();
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(addNewRecipeToList({ recipe: "recipe" }));
+  }, []);
+
   return (
     <Screen
       noSafeArea={true}
@@ -168,9 +177,18 @@ const RecipeAddHeader = ({ onCancel }) => {
   );
 };
 const RecipeAddBody = () => {
+  // State variables to store input field values
+  const [recipeTitle, setRecipeTitle] = useState("");
+  const [recipeDescription, setRecipeDescription] = useState("");
+  const [serves, setServes] = useState("");
+  const [cookTime, setCookTime] = useState("");
+  //  const [ingredients, setIngredients] = useState([]);
+  //  const [selectedImage, setSelectedImage] = useState(null);
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (image) => {
+    console.log(image);
     setSelectedImage(image);
   };
   const [ingredients, setIngredients] = useState([
@@ -184,6 +202,7 @@ const RecipeAddBody = () => {
       { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
     ]);
   };
+
   return (
     <View>
       <ImageInput
@@ -191,58 +210,63 @@ const RecipeAddBody = () => {
         imageAsset={selectedImage}
       />
 
-      <View className={"px-5 bg-lightGray pb-5"}>
-        <View className={"pt-3"}>
-          <TextInput
-            placeholder="Enter Recipe Title"
-            className={"text-lg py-2 pl-2"}
-          />
-          <ListItemSeparator color={colors.opacity} />
-        </View>
-        <View className={"pt-3"}>
-          <TextInput
-            placeholder="Enter Recipe Description"
-            className={"text-lg py-2 pl-2"}
-            multiline={true}
-          />
-          <ListItemSeparator color={colors.opactity} />
-        </View>
-        <View className={"pt-3"}>
-          <View className={"flex-row justify-between items-center"}>
-            <Text className={"text-lg pt-2 pl-2"}>Serves</Text>
-            <View className="w-52">
-              <TextInput
-                placeholder="2 people"
-                className={"text-lg py-2 pl-2"}
-              />
-              <ListItemSeparator color={colors.opacity} />
+      <View>
+        <View className={"px-5 bg-lightGray pb-5"}>
+          <View className={"pt-3"}>
+            <TextInput
+              placeholder="Enter Recipe Title"
+              className={"text-lg py-2 pl-2"}
+              value={recipeTitle}
+              onChangeText={(text) => setRecipeTitle(text)}
+            />
+          </View>
+          <View className={"pt-3"}>
+            <TextInput
+              placeholder="Enter Recipe Description"
+              className={"text-lg py-2 pl-2"}
+              multiline={true}
+              value={recipeDescription}
+              onChangeText={(text) => setRecipeDescription(text)}
+            />
+          </View>
+          <View className={"pt-3"}>
+            <View className={"flex-row justify-between items-center"}>
+              <Text className={"text-lg pt-2 pl-2"}>Serves</Text>
+              <View className="w-52">
+                <TextInput
+                  placeholder="2 people"
+                  className={"text-lg py-2 pl-2"}
+                  value={serves}
+                  onChangeText={(text) => setServes(text)}
+                />
+              </View>
+            </View>
+            <View className={"flex-row justify-between items-center"}>
+              <Text className={"text-lg py-2 pl-2"}>Cook Time</Text>
+              <View className="w-52">
+                <TextInput
+                  placeholder="1hr 30 min"
+                  className={"text-lg py-2 pl-2"}
+                  value={cookTime}
+                  onChangeText={(text) => setCookTime(text)}
+                />
+              </View>
             </View>
           </View>
-          <View className={"flex-row justify-between items-center"}>
-            <Text className={"text-lg py-2 pl-2"}>Cook Time</Text>
-            <View className="w-52">
-              <TextInput
-                placeholder="1hr 30 min"
-                className={"text-lg py-2 pl-2"}
-              />
-              <ListItemSeparator color={colors.opacity} />
-            </View>
+        </View>
+
+        <View className={"mt-3 py-5 px-5 bg-lightGray pb-5"}>
+          <View className={"flex-row items-center"}>
+            <Text className={"text-lg font-semibold pl-1 mr-4"}>
+              Ingredients
+            </Text>
+            <TouchableOpacity onPress={addIngredient}>
+              <Entypo name="add-to-list" size={20} color="black" />
+            </TouchableOpacity>
           </View>
-        </View>
-      </View>
 
-      <View
-        className={"mt-3 py-5 px-5 bg-lightGray pb-5"}
-        // style={{ height: 320 }}
-      >
-        <View className={"flex-row items-center"}>
-          <Text className={"text-lg font-semibold pl-1 mr-4"}>Ingredients</Text>
-          <TouchableOpacity onPress={addIngredient}>
-            <Entypo name="add-to-list" size={20} color="black" />
-          </TouchableOpacity>
+          <SortableList data={ingredients} setData={setIngredients} />
         </View>
-
-        <SortableList data={ingredients} setData={setIngredients} />
       </View>
     </View>
   );

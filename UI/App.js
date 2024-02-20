@@ -8,7 +8,8 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import * as SplashScreen from "expo-splash-screen";
 import * as Notifications from "expo-notifications";
 import AppProgress from "./app/components/AppProgress";
-
+import { Provider } from "react-redux";
+import { store } from "./app/store/store";
 export default function App() {
   const [loadingVisible, setLoadingVisible] = useState(false);
   Notifications.setNotificationHandler({
@@ -32,19 +33,21 @@ export default function App() {
         }}
         progress={1}
       />
-      <NavigationContainer>
-        <GestureHandlerRootView
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <BottomSheetModalProvider>
-            <AppNavigator />
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <GestureHandlerRootView
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <BottomSheetModalProvider>
+              <AppNavigator />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </NavigationContainer>
+      </Provider>
     </>
   );
 }
