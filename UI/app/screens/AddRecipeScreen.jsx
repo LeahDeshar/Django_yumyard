@@ -41,9 +41,30 @@ const AddRecipeScreen = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(addNewRecipeToList({ recipe: "recipe" }));
-  }, []);
+  const [recipeTitle, setRecipeTitle] = useState("");
+  const [recipeDescription, setRecipeDescription] = useState("");
+  const [serves, setServes] = useState("");
+  const [cookTime, setCookTime] = useState("");
+  const [ingredients, setIngredients] = useState([
+    { key: "item1", label: "Enter Ingredient 1" },
+    { key: "item2", label: "Enter Ingredient 2" },
+  ]);
+  const [method, setMethod] = useState([
+    { key: "step1", description: "Step 1" },
+  ]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleAddRecipe = () => {
+    const recipe = {
+      recipeTitle,
+      recipeDescription,
+      serves,
+      cookTime,
+      ingredients,
+      method,
+    };
+    console.log(recipe);
+  };
 
   return (
     <Screen
@@ -113,7 +134,20 @@ const AddRecipeScreen = () => {
       >
         <RecipeAddHeader onCancel={handleCloseModalPress} />
         <ScrollView className={"mb-10"}>
-          <RecipeAddBody />
+          <RecipeAddBody
+            recipeTitle={recipeTitle}
+            recipeDescription={recipeDescription}
+            serves={serves}
+            cookTime={cookTime}
+            ingredients={ingredients}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            setRecipeTitle={setRecipeTitle}
+            setRecipeDescription={setRecipeDescription}
+            setServes={setServes}
+            setCookTime={setCookTime}
+            setIngredients={setIngredients}
+          />
           <Method />
         </ScrollView>
       </BottomSheetModal>
@@ -176,25 +210,37 @@ const RecipeAddHeader = ({ onCancel }) => {
     </View>
   );
 };
-const RecipeAddBody = () => {
+const RecipeAddBody = ({
+  recipeTitle,
+  recipeDescription,
+  serves,
+  cookTime,
+  ingredients,
+  selectedImage,
+  setSelectedImage,
+  setRecipeTitle,
+  setRecipeDescription,
+  setServes,
+  setCookTime,
+  setIngredients,
+}) => {
+  console.log(ingredients);
   // State variables to store input field values
-  const [recipeTitle, setRecipeTitle] = useState("");
-  const [recipeDescription, setRecipeDescription] = useState("");
-  const [serves, setServes] = useState("");
-  const [cookTime, setCookTime] = useState("");
+  // const [recipeTitle, setRecipeTitle] = useState("");
+  // const [recipeDescription, setRecipeDescription] = useState("");
+  // const [serves, setServes] = useState("");
+  // const [cookTime, setCookTime] = useState("");
   //  const [ingredients, setIngredients] = useState([]);
   //  const [selectedImage, setSelectedImage] = useState(null);
-
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (image) => {
     console.log(image);
     setSelectedImage(image);
   };
-  const [ingredients, setIngredients] = useState([
-    { key: "item1", label: "Enter Ingredient 1" },
-    { key: "item2", label: "Enter Ingredient 2" },
-  ]);
+  // const [ingredients, setIngredients] = useState([
+  //   { key: "item1", label: "Enter Ingredient 1" },
+  //   { key: "item2", label: "Enter Ingredient 2" },
+  // ]);
   const addIngredient = () => {
     const newKey = `item${ingredients.length + 1}`;
     setIngredients([
@@ -272,12 +318,26 @@ const RecipeAddBody = () => {
   );
 };
 const SortableList = ({ data, setData }) => {
+  console.log("data", data);
   const renderItem = ({ item, index, drag, isActive }) => {
+    console.log(index);
     return (
       <View className={"flex-row justify-between items-center py-2"}>
         <AntDesign name="close" size={21} color="black" />
         <View className="w-80 ">
-          <TextInput placeholder={item.label} className={"pt-3 pb-1 my-2"} />
+          <TextInput
+            placeholder={item.label}
+            className={"pt-3 pb-1 my-2"}
+            // value={item.label}
+            onChangeText={(text) => {
+              console.log(index, item);
+              const newData = [...data];
+              newData[index].label = text;
+              setData(newData);
+            }}
+            // value={data}
+            // onChangeText={(text) => setData(text)}
+          />
           <ListItemSeparator color={isActive ? colors.primary : colors.black} />
         </View>
         <MaterialIcons
@@ -297,7 +357,10 @@ const SortableList = ({ data, setData }) => {
   return (
     <DraggableFlatList
       data={data}
-      renderItem={renderItem}
+      renderItem={({ item, index, drag, isActive }) =>
+        renderItem({ item, index, drag, isActive })
+      }
+      // renderItem={renderItem}
       keyExtractor={(item) => `draggable-item-${item.key}`}
       onDragEnd={onDragEnd}
       scrollEnabled={false}
