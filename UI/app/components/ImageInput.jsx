@@ -139,7 +139,7 @@
 //       source={{
 //         uri:
 //           typeof imageAsset === "string"
-//             ? ` ${imageAsset[0]?.uri}`
+//              ` ${imageAsset[0]?.uri}`
 //             : imageAsset[0]?.uri,
 //       }}
 //       className="h-full w-full"
@@ -170,6 +170,7 @@ import colors from "../config/colors";
 
 function ImageInput({ isMethod = false, isProfile = false }) {
   const [selectedImage, setSelectedImage] = useState(null);
+  console.log("selectedImage", selectedImage);
 
   const handleImageChange = (image) => {
     setSelectedImage(image);

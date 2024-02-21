@@ -10,7 +10,7 @@ import {
   ActionSheetIOS,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -65,7 +65,17 @@ const AddRecipeScreen = () => {
     };
     console.log(recipe);
   };
-
+  const handleImageChange = (image) => {
+    console.log(image);
+    setSelectedImage(image);
+  };
+  const addIngredient = () => {
+    const newKey = `item${ingredients.length + 1}`;
+    setIngredients([
+      ...ingredients,
+      { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
+    ]);
+  };
   return (
     <Screen
       noSafeArea={true}
@@ -134,20 +144,8 @@ const AddRecipeScreen = () => {
       >
         <RecipeAddHeader onCancel={handleCloseModalPress} />
         <ScrollView className={"mb-10"}>
-          <RecipeAddBody
-            recipeTitle={recipeTitle}
-            recipeDescription={recipeDescription}
-            serves={serves}
-            cookTime={cookTime}
-            ingredients={ingredients}
-            selectedImage={selectedImage}
-            setSelectedImage={setSelectedImage}
-            setRecipeTitle={setRecipeTitle}
-            setRecipeDescription={setRecipeDescription}
-            setServes={setServes}
-            setCookTime={setCookTime}
-            setIngredients={setIngredients}
-          />
+          <RecipeAddBody />
+
           <Method />
         </ScrollView>
       </BottomSheetModal>
@@ -210,37 +208,32 @@ const RecipeAddHeader = ({ onCancel }) => {
     </View>
   );
 };
-const RecipeAddBody = ({
-  recipeTitle,
-  recipeDescription,
-  serves,
-  cookTime,
-  ingredients,
-  selectedImage,
-  setSelectedImage,
-  setRecipeTitle,
-  setRecipeDescription,
-  setServes,
-  setCookTime,
-  setIngredients,
-}) => {
-  console.log(ingredients);
-  // State variables to store input field values
-  // const [recipeTitle, setRecipeTitle] = useState("");
-  // const [recipeDescription, setRecipeDescription] = useState("");
-  // const [serves, setServes] = useState("");
-  // const [cookTime, setCookTime] = useState("");
-  //  const [ingredients, setIngredients] = useState([]);
-  //  const [selectedImage, setSelectedImage] = useState(null);
+const RecipeAddBody = () => {
+  const [recipeTitle, setRecipeTitle] = useState("");
+  const [recipeDescription, setRecipeDescription] = useState("");
+  const [serves, setServes] = useState("");
+  const [cookTime, setCookTime] = useState("");
+  const [ingredients, setIngredients] = useState([
+    { key: "item1", label: "Enter Ingredient 1" },
+    { key: "item2", label: "Enter Ingredient 2" },
+  ]);
+  const [method, setMethod] = useState([
+    { key: "step1", description: "Step 1" },
+  ]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  console.log("list", {
+    recipeTitle,
+    recipeDescription,
+    serves,
+    cookTime,
+    selectedImage,
+  });
   const handleImageChange = (image) => {
     console.log(image);
     setSelectedImage(image);
   };
-  // const [ingredients, setIngredients] = useState([
-  //   { key: "item1", label: "Enter Ingredient 1" },
-  //   { key: "item2", label: "Enter Ingredient 2" },
-  // ]);
+
   const addIngredient = () => {
     const newKey = `item${ingredients.length + 1}`;
     setIngredients([
@@ -263,7 +256,7 @@ const RecipeAddBody = ({
               placeholder="Enter Recipe Title"
               className={"text-lg py-2 pl-2"}
               value={recipeTitle}
-              onChangeText={(text) => setRecipeTitle(text)}
+              onChangeText={(title) => setRecipeTitle(title)}
             />
           </View>
           <View className={"pt-3"}>
@@ -271,7 +264,7 @@ const RecipeAddBody = ({
               placeholder="Enter Recipe Description"
               className={"text-lg py-2 pl-2"}
               multiline={true}
-              value={recipeDescription}
+              // value={recipeDescription}
               onChangeText={(text) => setRecipeDescription(text)}
             />
           </View>
@@ -282,7 +275,7 @@ const RecipeAddBody = ({
                 <TextInput
                   placeholder="2 people"
                   className={"text-lg py-2 pl-2"}
-                  value={serves}
+                  // value={serves}
                   onChangeText={(text) => setServes(text)}
                 />
               </View>
@@ -293,7 +286,7 @@ const RecipeAddBody = ({
                 <TextInput
                   placeholder="1hr 30 min"
                   className={"text-lg py-2 pl-2"}
-                  value={cookTime}
+                  // value={cookTime}
                   onChangeText={(text) => setCookTime(text)}
                 />
               </View>
@@ -310,7 +303,6 @@ const RecipeAddBody = ({
               <Entypo name="add-to-list" size={20} color="black" />
             </TouchableOpacity>
           </View>
-
           <SortableList data={ingredients} setData={setIngredients} />
         </View>
       </View>
@@ -320,7 +312,6 @@ const RecipeAddBody = ({
 const SortableList = ({ data, setData }) => {
   console.log("data", data);
   const renderItem = ({ item, index, drag, isActive }) => {
-    console.log(index);
     return (
       <View className={"flex-row justify-between items-center py-2"}>
         <AntDesign name="close" size={21} color="black" />
@@ -329,12 +320,12 @@ const SortableList = ({ data, setData }) => {
             placeholder={item.label}
             className={"pt-3 pb-1 my-2"}
             // value={item.label}
-            onChangeText={(text) => {
-              console.log(index, item);
-              const newData = [...data];
-              newData[index].label = text;
-              setData(newData);
-            }}
+            // onChangeText={(text) => {
+            //   console.log(index, item);
+            //   const newData = [...data];
+            //   newData[index].label = text;
+            //   setData(newData);
+            // }}
             // value={data}
             // onChangeText={(text) => setData(text)}
           />
