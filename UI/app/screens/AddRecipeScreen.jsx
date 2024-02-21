@@ -7,9 +7,10 @@ import {
   PanResponder,
   Animated,
   TouchableOpacity,
+  ScrollView,
   ActionSheetIOS,
 } from "react-native";
-import { ScrollView } from "react-native-virtualized-view";
+// import { ScrollView } from "react-native-virtualized-view";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
@@ -27,8 +28,10 @@ import AppTextInput from "../components/AppTextInput";
 import { ListItemSeparator } from "../components/lists";
 import { StyleSheet } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewRecipeToList } from "../store/recipeReducer";
+import { fetchDataFromStorage } from "../store/localstorage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const AddRecipeScreen = () => {
   const BottomRef = useRef(null);
 
@@ -76,9 +79,26 @@ const AddRecipeScreen = () => {
       { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
     ]);
   };
-  const handleSaveButton = ({ recipe }) => {
-    console.log(recipe);
-  };
+
+  const [recipeLoad, setRecipeLoad] = useState(null);
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const storedRecipeList = await AsyncStorage.getItem("recipe");
+        const storedRecipe = JSON.parse(storedRecipeList);
+        console.log("Recipe from AsyncStorage loading:", storedRecipe);
+        setRecipeLoad(storedRecipe);
+      } catch (error) {
+        console.error("Error reading data from AsyncStorage:", error);
+      }
+    };
+    fetchRecipe();
+  }, []);
+  console.log(recipeLoad);
+  fetchDataFromStorage();
+  const listofrecipe = useSelector((state) => state.recipe.recipe);
+  console.log(listofrecipe);
   return (
     <Screen
       noSafeArea={true}
@@ -126,6 +146,34 @@ const AddRecipeScreen = () => {
         <Text className={"text-prim font-semibold text-2xl my-5"}>
           My Recipe
         </Text>
+        {recipeLoad?.map((i) => {
+          return (
+            <View
+              className={
+                "flex-row justify-between items-center bg-white rounded-2xl p-5 my-3"
+              }
+            >
+              <Image
+                source={{ uri: i.selectedImage }}
+                style={{
+                  height: 80,
+                  width: 80,
+                  resizeMode: "cover",
+                  borderRadius: 10,
+                }}
+              />
+              <View className={"w-52"}>
+                <Text className={"text-lg font-semibold"}>{i.recipeTitle}</Text>
+                <Text className={"text-mediumGray"}>{i.recipeDescription}</Text>
+              </View>
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color={colors.primary}
+              />
+            </View>
+          );
+        })}
         <Text className={"text-mediumGray"}>
           You haven't added any recipes yet!
         </Text>
@@ -145,15 +193,7 @@ const AddRecipeScreen = () => {
           backgroundColor: colors.lightGray2,
         }}
       >
-        <RecipeAddHeader
-          onCancel={handleCloseModalPress}
-          handleSaveButton={handleSaveButton}
-        />
-        <ScrollView className={"mb-10"}>
-          <RecipeAddBody />
-
-          {/* <Method /> */}
-        </ScrollView>
+        <RecipeAddBody onCancel={handleCloseModalPress} />
       </BottomSheetModal>
     </Screen>
   );
@@ -161,9 +201,68 @@ const AddRecipeScreen = () => {
 
 export default AddRecipeScreen;
 
-const RecipeAddHeader = ({ onCancel, handleSaveButton }) => {
+// const RecipeAddHeader = ({ onCancel, handleSaveButton, recipeInfo }) => {
+//   const handlePress = () => {
+//     const options = ["Save and Exit", "Discard Changes", "Cancel"];
+
+//     ActionSheetIOS.showActionSheetWithOptions(
+//       {
+//         options: options,
+//         cancelButtonIndex: options.length - 1,
+//       },
+//       (buttonIndex) => {
+//         // Handle the selected option
+//         switch (buttonIndex) {
+//           case 0:
+//             onCancel();
+//             break;
+//           case 1:
+//             onCancel();
+//             break;
+//           case 2:
+//             // Option 3 selected
+//             break;
+//           default:
+//             // Cancel or tap outside the ActionSheet
+//             break;
+//         }
+//       }
+//     );
+//   };
+
+//   return (
+//     <View>
+//       <View className={"flex-row justify-between items-center mx-5 "}>
+//         <TouchableOpacity onPress={handlePress}>
+//           <AntDesign name="close" size={25} color={colors.primary} />
+//         </TouchableOpacity>
+
+//         <View className={"flex-row items-center"}>
+//           <AppButton
+//             title="Save"
+//             className={"px-6  mr-3"}
+//             color={"bg-prim"}
+//             textColor="text-white"
+//             onPress={handleSaveButton}
+//           />
+//           <MaterialCommunityIcons
+//             name="dots-horizontal"
+//             size={24}
+//             color={colors.primary}
+//           />
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
+const RecipeAddBody = ({ onCancel }) => {
+  const [recipeTitle, setRecipeTitle] = useState("");
+  const [recipeDescription, setRecipeDescription] = useState("");
+  const [serves, setServes] = useState("");
+  const [cookTime, setCookTime] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const handlePress = () => {
-    // Define options for the ActionSheet
     const options = ["Save and Exit", "Discard Changes", "Cancel"];
 
     ActionSheetIOS.showActionSheetWithOptions(
@@ -190,39 +289,6 @@ const RecipeAddHeader = ({ onCancel, handleSaveButton }) => {
       }
     );
   };
-
-  return (
-    <View>
-      <View className={"flex-row justify-between items-center mx-5 "}>
-        <TouchableOpacity onPress={handlePress}>
-          <AntDesign name="close" size={25} color={colors.primary} />
-        </TouchableOpacity>
-
-        <View className={"flex-row items-center"}>
-          <AppButton
-            title="Save"
-            className={"px-6  mr-3"}
-            color={"bg-prim"}
-            textColor="text-white"
-            onPress={(recipe) => handleSaveButton(recipe)}
-          />
-          <MaterialCommunityIcons
-            name="dots-horizontal"
-            size={24}
-            color={colors.primary}
-          />
-        </View>
-      </View>
-    </View>
-  );
-};
-const RecipeAddBody = () => {
-  const [recipeTitle, setRecipeTitle] = useState("");
-  const [recipeDescription, setRecipeDescription] = useState("");
-  const [serves, setServes] = useState("");
-  const [cookTime, setCookTime] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const handleImageChange = (image) => {
     console.log("fileee", image);
     setSelectedImage(image);
@@ -251,71 +317,111 @@ const RecipeAddBody = () => {
     ingredients,
     method,
   });
+  const dispatch = useDispatch();
+  const handleSaveButton = () => {
+    console.log("saved");
+    const recipe = {
+      recipeTitle,
+      recipeDescription,
+      serves,
+      cookTime,
+      selectedImage,
+      ingredients,
+      method,
+    };
+    dispatch(addNewRecipeToList(recipe));
+  };
   return (
     <View>
-      <ImageInput
-        onImageChange={handleImageChange}
-        imageAsset={selectedImage}
-      />
-
       <View>
-        <View className={"px-5 bg-lightGray pb-5"}>
-          <View className={"pt-3"}>
-            <TextInput
-              placeholder="Enter Recipe Title"
-              className={"text-lg py-2 pl-2"}
-              value={recipeTitle}
-              onChangeText={(title) => setRecipeTitle(title)}
-            />
-          </View>
-          <View className={"pt-3"}>
-            <TextInput
-              placeholder="Enter Recipe Description"
-              className={"text-lg py-2 pl-2"}
-              multiline={true}
-              // value={recipeDescription}
-              onChangeText={(text) => setRecipeDescription(text)}
-            />
-          </View>
-          <View className={"pt-3"}>
-            <View className={"flex-row justify-between items-center"}>
-              <Text className={"text-lg pt-2 pl-2"}>Serves</Text>
-              <View className="w-52">
-                <TextInput
-                  placeholder="2 people"
-                  className={"text-lg py-2 pl-2"}
-                  // value={serves}
-                  onChangeText={(text) => setServes(text)}
-                />
-              </View>
-            </View>
-            <View className={"flex-row justify-between items-center"}>
-              <Text className={"text-lg py-2 pl-2"}>Cook Time</Text>
-              <View className="w-52">
-                <TextInput
-                  placeholder="1hr 30 min"
-                  className={"text-lg py-2 pl-2"}
-                  // value={cookTime}
-                  onChangeText={(text) => setCookTime(text)}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
+        <View className={"flex-row justify-between items-center mx-5 "}>
+          <TouchableOpacity onPress={handlePress}>
+            <AntDesign name="close" size={25} color={colors.primary} />
+          </TouchableOpacity>
 
-        <View className={"mt-3 py-5 px-5 bg-lightGray pb-5"}>
           <View className={"flex-row items-center"}>
-            <Text className={"text-lg font-semibold pl-1 mr-4"}>
-              Ingredients
-            </Text>
-            <TouchableOpacity onPress={addIngredient}>
-              <Entypo name="add-to-list" size={20} color="black" />
-            </TouchableOpacity>
+            <AppButton
+              title="Save"
+              className={"px-6  mr-3"}
+              color={"bg-prim"}
+              textColor="text-white"
+              onPress={handleSaveButton}
+            />
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={24}
+              color={colors.primary}
+            />
           </View>
-          <SortableList data={ingredients} setData={setIngredients} />
         </View>
       </View>
-      <Method steps={method} setSteps={setMethod} />
+      <ScrollView className={"mb-24"}>
+        <View>
+          <ImageInput
+            onImageChange={handleImageChange}
+            imageAsset={selectedImage}
+          />
+
+          <View>
+            <View className={"px-5 bg-lightGray pb-5"}>
+              <View className={"pt-3"}>
+                <TextInput
+                  placeholder="Enter Recipe Title"
+                  className={"text-lg py-2 pl-2"}
+                  value={recipeTitle}
+                  onChangeText={(title) => setRecipeTitle(title)}
+                />
+              </View>
+              <View className={"pt-3"}>
+                <TextInput
+                  placeholder="Enter Recipe Description"
+                  className={"text-lg py-2 pl-2"}
+                  multiline={true}
+                  // value={recipeDescription}
+                  onChangeText={(text) => setRecipeDescription(text)}
+                />
+              </View>
+              <View className={"pt-3"}>
+                <View className={"flex-row justify-between items-center"}>
+                  <Text className={"text-lg pt-2 pl-2"}>Serves</Text>
+                  <View className="w-52">
+                    <TextInput
+                      placeholder="2 people"
+                      className={"text-lg py-2 pl-2"}
+                      // value={serves}
+                      onChangeText={(text) => setServes(text)}
+                    />
+                  </View>
+                </View>
+                <View className={"flex-row justify-between items-center"}>
+                  <Text className={"text-lg py-2 pl-2"}>Cook Time</Text>
+                  <View className="w-52">
+                    <TextInput
+                      placeholder="1hr 30 min"
+                      className={"text-lg py-2 pl-2"}
+                      // value={cookTime}
+                      onChangeText={(text) => setCookTime(text)}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View className={"mt-3 py-5 px-5 bg-lightGray pb-5"}>
+              <View className={"flex-row items-center"}>
+                <Text className={"text-lg font-semibold pl-1 mr-4"}>
+                  Ingredients
+                </Text>
+                <TouchableOpacity onPress={addIngredient}>
+                  <Entypo name="add-to-list" size={20} color="black" />
+                </TouchableOpacity>
+              </View>
+              <SortableList data={ingredients} setData={setIngredients} />
+            </View>
+          </View>
+          <Method steps={method} setSteps={setMethod} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -361,11 +467,9 @@ const SortableList = ({ data, setData }) => {
       renderItem={({ item, index, drag, isActive }) =>
         renderItem({ item, index, drag, isActive })
       }
-      // renderItem={renderItem}
       keyExtractor={(item) => `draggable-item-${item.key}`}
       onDragEnd={onDragEnd}
       scrollEnabled={false}
-      // className={"py-10"}
     />
   );
 };
@@ -393,12 +497,10 @@ const Method = ({ steps, setSteps }) => {
       ...newData[index],
       image: image,
     };
-    console.log(newData);
-    console.log(index);
+
     setSelectedMethodImage(image);
     setSteps(newData);
   };
-  console.log(steps);
 
   const renderItem = ({ item, drag, isActive }) => {
     const addNumber = steps.findIndex((step) => step.key === item.key) + 1;
@@ -462,12 +564,6 @@ const Method = ({ steps, setSteps }) => {
     console.log(newData);
     setSteps(newData);
   };
-
-  // const [selectedImage, setSelectedImage] = useState(null);
-
-  // const handleImageChange = (image) => {
-  //   setSelectedImage(image);
-  // };
 
   return (
     <View className={"mt-3 bg-lightGray pl-3 py-5"}>

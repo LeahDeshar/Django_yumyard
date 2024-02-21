@@ -2,6 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createReducer } from "@reduxjs/toolkit";
+import { fetchDataFromStorage } from "./localstorage";
 
 const loadCartFromStorage = async () => {
   try {
@@ -38,6 +39,11 @@ const saveThemeToStorage = async (theme) => {
   }
 };
 
+const allRecipe = async () => {
+  const storedRecipeList = await AsyncStorage.getItem("recipe");
+  const storedRecipe = JSON.parse(storedRecipeList);
+  return storedRecipe;
+};
 const recipeSlice = createSlice({
   name: "recipe",
   initialState: {
@@ -47,15 +53,26 @@ const recipeSlice = createSlice({
     theme: "dark",
   },
   reducers: {
+    loadRecipe: (state, action) => {
+      state.recipe = action.payload;
+    },
     addNewRecipeToList: (state, action) => {
-      const { recipe } = action.payload;
+      const recipe = action.payload;
 
-      state.recipe.push({
-        ...recipe,
-      });
+      // console.log("action", action.payload);
+      // console.log("recipe in reducer", recipe);
+      // state.recipe.push({
+      //   ...recipe,
+      // });
+      const updatedRecipeList = [...state.recipe, recipe];
+      console.log("updatedRecipeList", updatedRecipeList);
+      // Update the state with the new array
+      state.recipe = updatedRecipeList;
 
-      saveRecipeToStorage(state.recipe);
-      loadCartFromStorage();
+      // Make sure to save the updated recipe list to AsyncStorage
+      saveRecipeToStorage(updatedRecipeList);
+      // saveRecipeToStorage(state.recipe);
+      fetchDataFromStorage();
     },
     addRecipeToBookmark: (state, action) => {
       const { recipe } = action.payload;
@@ -93,11 +110,7 @@ const recipeSlice = createSlice({
   },
 });
 
-export const {
-  addNewRecipeToList,
-
-  setTheme,
-} = recipeSlice.actions;
+export const { addNewRecipeToList, loadRecipe, setTheme } = recipeSlice.actions;
 export default recipeSlice.reducer;
 
 // export const allRecipeReducer = createReducer(
