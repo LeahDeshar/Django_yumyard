@@ -46,8 +46,8 @@ const AddRecipeScreen = () => {
   const [serves, setServes] = useState("");
   const [cookTime, setCookTime] = useState("");
   const [ingredients, setIngredients] = useState([
-    { key: "item1", label: "Enter Ingredient 1" },
-    { key: "item2", label: "Enter Ingredient 2" },
+    { key: 1, label: "Enter Ingredient 1" },
+    { key: 2, label: "Enter Ingredient 2" },
   ]);
   const [method, setMethod] = useState([
     { key: "step1", description: "Step 1" },
@@ -70,11 +70,14 @@ const AddRecipeScreen = () => {
     setSelectedImage(image);
   };
   const addIngredient = () => {
-    const newKey = `item${ingredients.length + 1}`;
+    const newKey = ingredients.length + 1;
     setIngredients([
       ...ingredients,
       { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
     ]);
+  };
+  const handleSaveButton = ({ recipe }) => {
+    console.log(recipe);
   };
   return (
     <Screen
@@ -142,11 +145,14 @@ const AddRecipeScreen = () => {
           backgroundColor: colors.lightGray2,
         }}
       >
-        <RecipeAddHeader onCancel={handleCloseModalPress} />
+        <RecipeAddHeader
+          onCancel={handleCloseModalPress}
+          handleSaveButton={handleSaveButton}
+        />
         <ScrollView className={"mb-10"}>
           <RecipeAddBody />
 
-          <Method />
+          {/* <Method /> */}
         </ScrollView>
       </BottomSheetModal>
     </Screen>
@@ -155,7 +161,7 @@ const AddRecipeScreen = () => {
 
 export default AddRecipeScreen;
 
-const RecipeAddHeader = ({ onCancel }) => {
+const RecipeAddHeader = ({ onCancel, handleSaveButton }) => {
   const handlePress = () => {
     // Define options for the ActionSheet
     const options = ["Save and Exit", "Discard Changes", "Cancel"];
@@ -184,6 +190,7 @@ const RecipeAddHeader = ({ onCancel }) => {
       }
     );
   };
+
   return (
     <View>
       <View className={"flex-row justify-between items-center mx-5 "}>
@@ -197,6 +204,7 @@ const RecipeAddHeader = ({ onCancel }) => {
             className={"px-6  mr-3"}
             color={"bg-prim"}
             textColor="text-white"
+            onPress={(recipe) => handleSaveButton(recipe)}
           />
           <MaterialCommunityIcons
             name="dots-horizontal"
@@ -213,35 +221,36 @@ const RecipeAddBody = () => {
   const [recipeDescription, setRecipeDescription] = useState("");
   const [serves, setServes] = useState("");
   const [cookTime, setCookTime] = useState("");
-  const [ingredients, setIngredients] = useState([
-    { key: "item1", label: "Enter Ingredient 1" },
-    { key: "item2", label: "Enter Ingredient 2" },
-  ]);
-  const [method, setMethod] = useState([
-    { key: "step1", description: "Step 1" },
-  ]);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const handleImageChange = (image) => {
+    console.log("fileee", image);
+    setSelectedImage(image);
+  };
+  const [ingredients, setIngredients] = useState([
+    { key: 0, label: "Enter Ingredient 1" },
+    { key: 1, label: "Enter Ingredient 2" },
+  ]);
+  const [method, setMethod] = useState([
+    { key: 0, description: "Step 1", image: null },
+    { key: 1, description: "Step 2", image: null },
+  ]);
+  const addIngredient = () => {
+    const newKey = ingredients.length + 1;
+    setIngredients([
+      ...ingredients,
+      { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
+    ]);
+  };
   console.log("list", {
     recipeTitle,
     recipeDescription,
     serves,
     cookTime,
     selectedImage,
+    ingredients,
+    method,
   });
-  const handleImageChange = (image) => {
-    console.log(image);
-    setSelectedImage(image);
-  };
-
-  const addIngredient = () => {
-    const newKey = `item${ingredients.length + 1}`;
-    setIngredients([
-      ...ingredients,
-      { key: newKey, label: `Enter Ingredient ${ingredients.length + 1}` },
-    ]);
-  };
-
   return (
     <View>
       <ImageInput
@@ -306,12 +315,21 @@ const RecipeAddBody = () => {
           <SortableList data={ingredients} setData={setIngredients} />
         </View>
       </View>
+      <Method steps={method} setSteps={setMethod} />
     </View>
   );
 };
 const SortableList = ({ data, setData }) => {
-  console.log("data", data);
-  const renderItem = ({ item, index, drag, isActive }) => {
+  const updateItemText = (index, text) => {
+    const newData = [...data];
+    newData[index] = { ...newData[index], label: text };
+    setData(newData);
+  };
+  console.log(data, "data");
+
+  const renderItem = ({ item, drag, isActive }) => {
+    const index = data.findIndex((ingredient) => ingredient.key === item.key);
+
     return (
       <View className={"flex-row justify-between items-center py-2"}>
         <AntDesign name="close" size={21} color="black" />
@@ -319,15 +337,7 @@ const SortableList = ({ data, setData }) => {
           <TextInput
             placeholder={item.label}
             className={"pt-3 pb-1 my-2"}
-            // value={item.label}
-            // onChangeText={(text) => {
-            //   console.log(index, item);
-            //   const newData = [...data];
-            //   newData[index].label = text;
-            //   setData(newData);
-            // }}
-            // value={data}
-            // onChangeText={(text) => setData(text)}
+            onChangeText={(text) => updateItemText(index, text)}
           />
           <ListItemSeparator color={isActive ? colors.primary : colors.black} />
         </View>
@@ -359,23 +369,40 @@ const SortableList = ({ data, setData }) => {
     />
   );
 };
-const Method = () => {
-  const [steps, setSteps] = useState([
-    { key: "step1", description: "Step 1" },
-    { key: "step2", description: "Step 2" },
-  ]);
-
+const Method = ({ steps, setSteps }) => {
   const addStep = () => {
-    const newKey = `step${steps.length + 1}`;
+    const newKey = steps.length + 1;
     setSteps([
       ...steps,
-      { key: newKey, description: `Step ${steps.length + 1}` },
+      { key: newKey, description: `Step ${steps.length + 1}`, image: null },
     ]);
   };
+  const updateItemText = (index, text) => {
+    const newData = [...steps];
+    newData[index] = {
+      ...newData[index],
+      description: text,
+    };
+    setSteps(newData);
+  };
+  const [selectedMethodImage, setSelectedMethodImage] = useState(null);
+  console.log("selectedMethodImage", selectedMethodImage);
+  const handleMethodImage = (image, index) => {
+    const newData = [...steps];
+    newData[index] = {
+      ...newData[index],
+      image: image,
+    };
+    console.log(newData);
+    console.log(index);
+    setSelectedMethodImage(image);
+    setSteps(newData);
+  };
+  console.log(steps);
 
-  const renderItem = ({ item, index, drag, isActive }) => {
-    // const addNumber = index + 1;
+  const renderItem = ({ item, drag, isActive }) => {
     const addNumber = steps.findIndex((step) => step.key === item.key) + 1;
+    const index = steps.findIndex((step) => step.key === item.key);
     return (
       <>
         <View
@@ -386,7 +413,6 @@ const Method = () => {
               backgroundColor: colors.black,
               paddingHorizontal: 10,
               paddingVertical: 5,
-
               borderRadius: 25,
             }}
           >
@@ -396,6 +422,7 @@ const Method = () => {
             <TextInput
               placeholder={item.description}
               className={"pt-3 pb-1 my-2 pl-3"}
+              onChangeText={(text) => updateItemText(index, text)}
             />
             <ListItemSeparator
               color={isActive ? colors.primary : colors.black}
@@ -424,8 +451,8 @@ const Method = () => {
         <View className={"self-start  w-36"} style={{ borderRadius: 25 }}>
           <ImageInput
             isMethod
-            onImageChange={handleImageChange}
-            imageAsset={selectedImage}
+            onImageChange={(image) => handleMethodImage(image, index)}
+            imageAsset={selectedMethodImage}
           />
         </View>
       </>
@@ -436,11 +463,11 @@ const Method = () => {
     setSteps(newData);
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageChange = (image) => {
-    setSelectedImage(image);
-  };
+  // const handleImageChange = (image) => {
+  //   setSelectedImage(image);
+  // };
 
   return (
     <View className={"mt-3 bg-lightGray pl-3 py-5"}>

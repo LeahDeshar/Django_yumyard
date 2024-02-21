@@ -168,12 +168,13 @@ import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Make sure you import necessary icons from Expo package
 import colors from "../config/colors";
 
-function ImageInput({ isMethod = false, isProfile = false }) {
+function ImageInput({ isMethod = false, isProfile = false, onImageChange }) {
   const [selectedImage, setSelectedImage] = useState(null);
   console.log("selectedImage", selectedImage);
 
   const handleImageChange = (image) => {
     setSelectedImage(image);
+    // onImageChange()
   };
 
   const handleSelectImage = async () => {
@@ -225,6 +226,7 @@ function ImageInput({ isMethod = false, isProfile = false }) {
     if (!pickerResult.canceled && pickerResult.assets.length > 0) {
       const firstAsset = pickerResult.assets[0];
       setSelectedImage(firstAsset.uri);
+      onImageChange(firstAsset.uri);
 
       let formData = new FormData();
       formData.append("file", {
