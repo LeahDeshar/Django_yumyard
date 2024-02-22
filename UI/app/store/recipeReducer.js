@@ -2,20 +2,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createReducer } from "@reduxjs/toolkit";
-import { fetchDataFromStorage } from "./localstorage";
+import { fetchDataFromStorage, fetchRecipesFromStorage } from "./localstorage";
 
-const loadCartFromStorage = async () => {
-  try {
-    const cartData = await AsyncStorage.getItem("cart");
-    const theme = await AsyncStorage.getItem("theme");
+// const loadCartFromStorage = async () => {
+//   try {
+//     const cartData = await AsyncStorage.getItem("cart");
+//     const theme = await AsyncStorage.getItem("theme");
 
-    console.log(JSON.parse(cartData), theme);
-    return cartData ? JSON.parse(cartData) : [];
-  } catch (error) {
-    console.error("Error loading cart from AsyncStorage:", error);
-    return [];
-  }
-};
+//     console.log(JSON.parse(cartData), theme);
+//     return cartData ? JSON.parse(cartData) : [];
+//   } catch (error) {
+//     console.error("Error loading cart from AsyncStorage:", error);
+//     return [];
+//   }
+// };
 
 const saveBookMarkToStorage = async (bookmark) => {
   try {
@@ -24,13 +24,7 @@ const saveBookMarkToStorage = async (bookmark) => {
     console.error("Error saving bookmark to AsyncStorage:", error);
   }
 };
-const saveRecipeToStorage = async (recipe) => {
-  try {
-    await AsyncStorage.setItem("recipe", JSON.stringify(recipe));
-  } catch (error) {
-    console.error("Error saving recipe to AsyncStorage:", error);
-  }
-};
+
 const saveThemeToStorage = async (theme) => {
   try {
     await AsyncStorage.setItem("theme", theme);
@@ -39,15 +33,27 @@ const saveThemeToStorage = async (theme) => {
   }
 };
 
-const allRecipe = async () => {
-  const storedRecipeList = await AsyncStorage.getItem("recipe");
-  const storedRecipe = JSON.parse(storedRecipeList);
-  return storedRecipe;
+const saveRecipeToStorage = async (recipe) => {
+  try {
+    // await AsyncStorage.setItem("recipe", JSON.stringify(recipe));
+
+    const existingList = await AsyncStorage.getItem("recipe");
+
+    let recipes = [];
+
+    if (existingList !== null) {
+      recipes = JSON.parse(existingList);
+    }
+    recipes.push(...recipe);
+    await AsyncStorage.setItem("recipe", JSON.stringify(recipes));
+  } catch (error) {
+    console.error("Error saving recipe to AsyncStorage:", error);
+  }
 };
 const recipeSlice = createSlice({
   name: "recipe",
   initialState: {
-    recipe: [],
+    newrecipe: [],
     bookmark: [],
     total: [],
     theme: "dark",
@@ -57,22 +63,16 @@ const recipeSlice = createSlice({
       state.recipe = action.payload;
     },
     addNewRecipeToList: (state, action) => {
-      const recipe = action.payload;
+      const recipes = action.payload;
 
-      // console.log("action", action.payload);
-      // console.log("recipe in reducer", recipe);
-      // state.recipe.push({
-      //   ...recipe,
-      // });
-      const updatedRecipeList = [...state.recipe, recipe];
-      console.log("updatedRecipeList", updatedRecipeList);
-      // Update the state with the new array
-      state.recipe = updatedRecipeList;
+      // const updatedRecipeList = [...state.recipe, recipes];
+      // console.log("updatedRecipeList", updatedRecipeList);
+      // state.recipe = updatedRecipeList;
 
-      // Make sure to save the updated recipe list to AsyncStorage
-      saveRecipeToStorage(updatedRecipeList);
-      // saveRecipeToStorage(state.recipe);
-      fetchDataFromStorage();
+      state.newrecipe.push(recipes);
+      console.log(state.newrecipe, "recipes list");
+      saveRecipeToStorage(state.newrecipe);
+      fetchRecipesFromStorage();
     },
     addRecipeToBookmark: (state, action) => {
       const { recipe } = action.payload;

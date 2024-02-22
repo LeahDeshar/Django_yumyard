@@ -10,6 +10,7 @@ import {
   ScrollView,
   ActionSheetIOS,
 } from "react-native";
+// import RNFS from "react-native-fs";
 // import { ScrollView } from "react-native-virtualized-view";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Screen from "../components/Screen";
@@ -69,6 +70,8 @@ const AddRecipeScreen = () => {
     console.log(recipe);
   };
   const handleImageChange = (image) => {
+    // const filePath = `${RNFS.DocumentDirectoryPath}/${image.fileName}`;
+    // await RNFS.writeFile(filePath, image.data, "base64");
     console.log(image);
     setSelectedImage(image);
   };
@@ -97,8 +100,8 @@ const AddRecipeScreen = () => {
   }, []);
   console.log(recipeLoad);
   fetchDataFromStorage();
-  const listofrecipe = useSelector((state) => state.recipe.recipe);
-  console.log(listofrecipe);
+  const listofrecipe = useSelector((state) => state.recipe.newrecipe);
+  console.log("new list added", listofrecipe);
   return (
     <Screen
       noSafeArea={true}
@@ -146,34 +149,39 @@ const AddRecipeScreen = () => {
         <Text className={"text-prim font-semibold text-2xl my-5"}>
           My Recipe
         </Text>
-        {recipeLoad?.map((i) => {
-          return (
-            <View
-              className={
-                "flex-row justify-between items-center bg-white rounded-2xl p-5 my-3"
-              }
-            >
-              <Image
-                source={{ uri: i.selectedImage }}
-                style={{
-                  height: 80,
-                  width: 80,
-                  resizeMode: "cover",
-                  borderRadius: 10,
-                }}
-              />
-              <View className={"w-52"}>
-                <Text className={"text-lg font-semibold"}>{i.recipeTitle}</Text>
-                <Text className={"text-mediumGray"}>{i.recipeDescription}</Text>
+        {/* {recipeLoad &&
+          recipeLoad?.map((i) => {
+            return (
+              <View
+                className={
+                  "flex-row justify-between items-center bg-white rounded-2xl p-5 my-3"
+                }
+              >
+                <Image
+                  source={{ uri: i.selectedImage }}
+                  style={{
+                    height: 80,
+                    width: 80,
+                    resizeMode: "cover",
+                    borderRadius: 10,
+                  }}
+                />
+                <View className={"w-52"}>
+                  <Text className={"text-lg font-semibold"}>
+                    {i.recipeTitle}
+                  </Text>
+                  <Text className={"text-mediumGray"}>
+                    {i.recipeDescription}
+                  </Text>
+                </View>
+                <MaterialCommunityIcons
+                  name="dots-horizontal"
+                  size={24}
+                  color={colors.primary}
+                />
               </View>
-              <MaterialCommunityIcons
-                name="dots-horizontal"
-                size={24}
-                color={colors.primary}
-              />
-            </View>
-          );
-        })}
+            );
+          })} */}
         <Text className={"text-mediumGray"}>
           You haven't added any recipes yet!
         </Text>
@@ -201,60 +209,6 @@ const AddRecipeScreen = () => {
 
 export default AddRecipeScreen;
 
-// const RecipeAddHeader = ({ onCancel, handleSaveButton, recipeInfo }) => {
-//   const handlePress = () => {
-//     const options = ["Save and Exit", "Discard Changes", "Cancel"];
-
-//     ActionSheetIOS.showActionSheetWithOptions(
-//       {
-//         options: options,
-//         cancelButtonIndex: options.length - 1,
-//       },
-//       (buttonIndex) => {
-//         // Handle the selected option
-//         switch (buttonIndex) {
-//           case 0:
-//             onCancel();
-//             break;
-//           case 1:
-//             onCancel();
-//             break;
-//           case 2:
-//             // Option 3 selected
-//             break;
-//           default:
-//             // Cancel or tap outside the ActionSheet
-//             break;
-//         }
-//       }
-//     );
-//   };
-
-//   return (
-//     <View>
-//       <View className={"flex-row justify-between items-center mx-5 "}>
-//         <TouchableOpacity onPress={handlePress}>
-//           <AntDesign name="close" size={25} color={colors.primary} />
-//         </TouchableOpacity>
-
-//         <View className={"flex-row items-center"}>
-//           <AppButton
-//             title="Save"
-//             className={"px-6  mr-3"}
-//             color={"bg-prim"}
-//             textColor="text-white"
-//             onPress={handleSaveButton}
-//           />
-//           <MaterialCommunityIcons
-//             name="dots-horizontal"
-//             size={24}
-//             color={colors.primary}
-//           />
-//         </View>
-//       </View>
-//     </View>
-//   );
-// };
 const RecipeAddBody = ({ onCancel }) => {
   const [recipeTitle, setRecipeTitle] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
@@ -291,6 +245,8 @@ const RecipeAddBody = ({ onCancel }) => {
   };
   const handleImageChange = (image) => {
     console.log("fileee", image);
+    // const filePath = `${RNFS.DocumentDirectoryPath}/${image.fileName}`;
+    // await RNFS.writeFile(filePath, image.data, "base64");
     setSelectedImage(image);
   };
   const [ingredients, setIngredients] = useState([
@@ -498,7 +454,7 @@ const Method = ({ steps, setSteps }) => {
       image: image,
     };
 
-    setSelectedMethodImage(image);
+    setSelectedMethodImage(filePath);
     setSteps(newData);
   };
 

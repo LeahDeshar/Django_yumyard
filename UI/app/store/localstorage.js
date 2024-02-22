@@ -1,13 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loadRecipe } from "./recipeReducer";
 
-export const fetchDataFromStorage = async (dispatch) => {
+export const fetchDataFromStorage = async () => {
   try {
     const storedRecipeList = await AsyncStorage.getItem("recipe");
     const storedRecipe = JSON.parse(storedRecipeList);
-    dispatch(loadRecipe(storedRecipe || []));
     console.log("Recipe from AsyncStorage:", storedRecipe);
   } catch (error) {
     console.error("Error reading data from AsyncStorage:", error);
+  }
+};
+export const fetchRecipesFromStorage = async () => {
+  try {
+    const storedRecipesJSON = await AsyncStorage.getItem("recipe");
+    return storedRecipesJSON ? JSON.parse(storedRecipesJSON) : [];
+  } catch (error) {
+    console.error("Error reading data from AsyncStorage:", error);
+    return [];
   }
 };
