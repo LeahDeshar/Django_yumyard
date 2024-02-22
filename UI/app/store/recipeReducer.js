@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createReducer } from "@reduxjs/toolkit";
 import { fetchDataFromStorage, fetchRecipesFromStorage } from "./localstorage";
+import { useSelector } from "react-redux";
 
 // const loadCartFromStorage = async () => {
 //   try {
@@ -35,17 +36,18 @@ const saveThemeToStorage = async (theme) => {
 
 const saveRecipeToStorage = async (recipe) => {
   try {
-    // await AsyncStorage.setItem("recipe", JSON.stringify(recipe));
+    await AsyncStorage.setItem("recipe", JSON.stringify(recipe));
+    // Retrieve existing recipes from AsyncStorage
+    // const existingList = await AsyncStorage.getItem("recipe");
 
-    const existingList = await AsyncStorage.getItem("recipe");
+    // // Parse existing recipes or initialize an empty array
+    // let recipes = existingList ? JSON.parse(existingList) : [];
 
-    let recipes = [];
+    // // Add new recipe(s) to the recipes array
+    // recipes.push(...recipe);
 
-    if (existingList !== null) {
-      recipes = JSON.parse(existingList);
-    }
-    recipes.push(...recipe);
-    await AsyncStorage.setItem("recipe", JSON.stringify(recipes));
+    // // Store the updated recipes array back to AsyncStorage
+    // await AsyncStorage.setItem("recipe", JSON.stringify(recipes));
   } catch (error) {
     console.error("Error saving recipe to AsyncStorage:", error);
   }
@@ -63,16 +65,22 @@ const recipeSlice = createSlice({
       state.recipe = action.payload;
     },
     addNewRecipeToList: (state, action) => {
-      const recipes = action.payload;
-
-      // const updatedRecipeList = [...state.recipe, recipes];
-      // console.log("updatedRecipeList", updatedRecipeList);
-      // state.recipe = updatedRecipeList;
-
-      state.newrecipe.push(recipes);
-      console.log(state.newrecipe, "recipes list");
+      // add new recipe to the list and save to storage
+      // console.log("payload", action.payload);
+      // const { recipe } = action.payload;
+      // state.newrecipe.push({
+      //   ...recipe,
+      // });
+      state.newrecipe = [...state.newrecipe, action.payload];
       saveRecipeToStorage(state.newrecipe);
-      fetchRecipesFromStorage();
+
+      // const recipes = action.payload;
+
+      // state.newrecipe.push(recipes);
+      // console.log(state.newrecipe, "recipes list");
+
+      // saveRecipeToStorage(state.newrecipe);
+      // fetchRecipesFromStorage();
     },
     addRecipeToBookmark: (state, action) => {
       const { recipe } = action.payload;
