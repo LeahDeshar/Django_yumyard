@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import AppVideo from "../components/AppVideo";
 import Screen from "../components/Screen";
 import { FoodData } from "../utils/data/FoodData";
@@ -43,8 +43,48 @@ const RecipeScreen = ({ route }) => {
       </View>
       <ListItemSeparator />
       <View>
-        <Text>Reviews</Text>
-        <Text>103 comments- 35 pictures</Text>
+        <TouchableOpacity className={"flex-row justify-between items-center"}>
+          <View>
+            <Text>Reviews</Text>
+            <Text>103 comments- 35 pictures</Text>
+          </View>
+          <Text>Read</Text>
+        </TouchableOpacity>
+      </View>
+      <ListItemSeparator />
+      <View>
+        <Text>Difficult: {recipe?.difficulty}</Text>
+      </View>
+      <ListItemSeparator />
+      <View>
+        <Text>Ingredients</Text>
+        {recipe?.ingredients.map((ingredient, index) => (
+          <Text key={index}>{ingredient}</Text>
+        ))}
+      </View>
+      <View>
+        <Text>Nutrition</Text>
+        <View className={"flex-row"}>
+          <Text>Cal</Text>
+          <Text>Protein</Text>
+          <Text>Fat</Text>
+          <Text>Carbs</Text>
+        </View>
+        <View className={"flex-row"}>
+          <Text>{recipe?.nutritionPerServing?.calories}</Text>
+          <Text>{recipe?.nutritionPerServing?.protein}</Text>
+          <Text>{recipe?.nutritionPerServing?.fat}</Text>
+          <Text>{recipe?.nutritionPerServing?.carbs}</Text>
+        </View>
+      </View>
+      <View>
+        {recipe?.steps.map((step, index) => (
+          <View key={index}>
+            <Text>Step {index + 1}</Text>
+            <Text>{step?.title}</Text>
+            <Text>{step?.description}</Text>
+          </View>
+        ))}
       </View>
     </Screen>
   );
