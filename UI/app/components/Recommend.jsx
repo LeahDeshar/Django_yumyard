@@ -10,7 +10,9 @@ import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import React from "react";
 import { FoodData } from "../utils/data/FoodData";
 import colors from "../config/colors";
+import { useNavigation } from "@react-navigation/native";
 const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
+  const navigation = useNavigation();
   return (
     <View>
       <View className={"flex-row justify-between items-center mt-3 mx-5"}>
@@ -38,6 +40,7 @@ const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
                 elevation: 5,
                 borderRadius: 15,
               }}
+              onPress={() => navigation.navigate("recipedetails")}
             >
               <Image
                 source={food.image}

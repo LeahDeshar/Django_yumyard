@@ -9,6 +9,7 @@ import Register from "../screens/Register";
 import Login from "../screens/Login";
 import Test from "../screens/Test";
 import EditProfile from "../screens/EditProfile";
+import RecipeScreen from "../screens/RecipeScreen";
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function AppNavigator() {
       <Stack.Screen component={Register} name={"Register"} />
       <Stack.Screen component={Login} name={"Login"} />
       <Stack.Screen component={Test} name={"Test"} />
+      <Stack.Screen component={RecipeScreen} name={"recipedetails"} />
       <Stack.Screen
         component={EditProfile}
         name={"Edit"}
