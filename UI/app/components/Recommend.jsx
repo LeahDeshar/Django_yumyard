@@ -40,7 +40,9 @@ const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
                 elevation: 5,
                 borderRadius: 15,
               }}
-              onPress={() => navigation.navigate("recipedetails")}
+              onPress={() =>
+                navigation.navigate("recipedetails", { id: food.id })
+              }
             >
               <Image
                 source={food.image}
@@ -76,7 +78,7 @@ const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
               )}
               <View className={"absolute bottom-3 ml-3  w-64"}>
                 <Text className={"text-lightGray2 font-semibold text-lg"}>
-                  @{food.username}
+                  @{food.user.username}
                 </Text>
                 <Text className={"text-white font-bold text-3xl"}>
                   {food.name}

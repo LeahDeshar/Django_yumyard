@@ -11,15 +11,13 @@ const AppVideo = () => {
       <Video
         ref={video}
         style={styles.video}
-        source={{
-          uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-        }}
+        source={require("../assets/videos/1.mp4")}
         useNativeControls
         resizeMode={ResizeMode.COVER}
         isLooping
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
-      <View style={styles.buttons}>
+      {/* <View style={styles.buttons}>
         <Button
           title={status.isPlaying ? "Pause" : "Play"}
           onPress={() =>
@@ -28,7 +26,7 @@ const AppVideo = () => {
               : video.current.playAsync()
           }
         />
-      </View>
+      </View> */}
     </View>
   );
 };
