@@ -43,7 +43,7 @@ export default function App() {
             }}
           >
             <BottomSheetModalProvider>
-              <AppNavigator />
+              {/* <AppNavigator /> */}
             </BottomSheetModalProvider>
           </GestureHandlerRootView>
         </NavigationContainer>
