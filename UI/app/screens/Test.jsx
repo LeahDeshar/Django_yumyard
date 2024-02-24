@@ -1,4 +1,4 @@
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Button, Text } from "react-native";
 import React from "react";
 
 const Test = () => {

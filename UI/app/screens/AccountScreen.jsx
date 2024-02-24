@@ -11,7 +11,6 @@ import routes from "../navigation/routes";
 import AppListItems from "../components/AppListItems";
 import AppButton from "../components/AppButton";
 import AppSwitch from "../components/AppSwitch";
-import { useBearStore } from "../store";
 import ImageInput from "../components/ImageInput";
 
 export default function AccountScreen({ route, navigation }) {

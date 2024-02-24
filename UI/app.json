@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -26,9 +24,6 @@
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
-    "plugins": [
-      "expo-build-properties",
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-build-properties"]
   }
 }

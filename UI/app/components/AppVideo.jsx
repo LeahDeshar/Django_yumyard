@@ -1,7 +1,10 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet, Button } from "react-native";
 import { ResizeMode, Video } from "expo-av";
-
+import colors from "../config/colors";
+import AppButton from "./AppButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 const AppVideo = () => {
   const [status, setStatus] = React.useState({});
   const [isPlaying, setIsPlaying] = useState(false);
@@ -40,11 +43,16 @@ const AppVideo = () => {
       />
       <View className={"absolute  w-full justify-center items-center h-full"}>
         <View style={styles.controls}>
-          <Button
-            title={isPlaying ? "Pause" : "Play"}
-            onPress={handlePlayPause}
-          />
-          <Button title="Stop" onPress={handleStop} />
+          <TouchableOpacity onPress={handlePlayPause} className={"mr-5"}>
+            <Ionicons
+              name={isPlaying ? "pause" : "play"}
+              size={35}
+              color={colors.highlight}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleStop}>
+            <Ionicons name={"stop"} size={35} color={colors.highlight} />
+          </TouchableOpacity>
         </View>
         <View style={styles.progressBarContainer}>
           <View
@@ -75,13 +83,16 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     width: "90%",
-    height: 10,
-    backgroundColor: "#ccc",
+    height: 5,
+    backgroundColor: "#cccccc57",
+    borderRadius: 25,
     marginTop: 10,
+    top: 150,
   },
   progressBar: {
     height: "100%",
-    backgroundColor: "#007AFF",
+    backgroundColor: colors.highlight,
+    borderRadius: 25,
   },
 });
 
