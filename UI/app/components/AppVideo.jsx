@@ -12,9 +12,10 @@ const AppVideo = () => {
         ref={video}
         style={styles.video}
         source={require("../assets/videos/1.mp4")}
-        useNativeControls
+        // useNativeControls
         resizeMode={ResizeMode.COVER}
         isLooping
+        shouldPlay
         onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
       {/* <View style={styles.buttons}>
