@@ -35,7 +35,7 @@ const AppVideo = () => {
         source={require("../assets/videos/1.mp4")}
         resizeMode={ResizeMode.COVER}
         onError={(error) => console.log("Video playback error:", error)}
-        shouldPlay
+        // shouldPlay
         onPlaybackStatusUpdate={(status) => {
           setStatus(status);
           handleProgress(status);

@@ -7,6 +7,9 @@ import { ListItemSeparator } from "../components/lists";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { Entypo } from "@expo/vector-icons";
+import { Tags } from "../utils/data/Tags";
+import Recommend from "../components/Recommend";
+import Card2 from "../components/Card2";
 const RecipeScreen = ({ route }) => {
   const { id } = route.params;
   console.log(id);
@@ -119,14 +122,55 @@ const RecipeScreen = ({ route }) => {
 
       <View className={"mx-5 my-3"}>
         {recipe?.steps.map((step, index) => (
-          <View key={index}>
+          <View key={index} className={"my-3"}>
             <Text className={"text-lg font-semibold mb-2"}>
               Step {index + 1}
             </Text>
-            <Text>{step?.title}</Text>
-            <Text>{step?.description}</Text>
+            <Image
+              source={{
+                uri: step?.image,
+              }}
+              style={{
+                width: "100%",
+                height: 350,
+                borderRadius: 10,
+              }}
+            />
+            <View className={"my-3"}>
+              <Text className={"font-semibold text-lg"}>{step?.title}</Text>
+              <Text>{step?.description}</Text>
+            </View>
           </View>
         ))}
+      </View>
+
+      <View className={"mx-5 my-3 pb-6"}>
+        <TouchableOpacity
+          className={
+            "flex-row items-center border-2 rounded-full border-prim justify-center py-1"
+          }
+        >
+          <Ionicons name={"camera-outline"} size={30} color={colors.primary} />
+          <Text className={"pl-2 text-prim font-semibold"}>
+            Snap,Click,Share
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View>
+        <Card2 title={"More Delicious Ideas For You"} />
+      </View>
+      <ListItemSeparator />
+
+      <View className={"mx-5 my-3 pt-3 pb-5"}>
+        <Text className={"text-lg font-semibold mb-2"}>Tags</Text>
+        <View className={"  flex-row flex-wrap"}>
+          {Tags.map((tag, index) => (
+            <TouchableOpacity key={index}>
+              <Text className={" text-prim py-2 px-2"}>{tag}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </Screen>
   );

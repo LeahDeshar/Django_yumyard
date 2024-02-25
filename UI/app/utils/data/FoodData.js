@@ -92,14 +92,25 @@ export const FoodData = [
         id: 1,
         title: "Toast the bread",
         description: "Toast the whole grain bread slices until golden brown.",
+        image:
+          "https://images.pexels.com/photos/784632/pexels-photo-784632.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       },
       {
         id: 2,
         title: "Prepare the avocado",
         description:
           "Mash the ripe avocado and spread it on the toasted bread slices.",
+        image:
+          "https://images.pexels.com/photos/175753/pexels-photo-175753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       },
-      // Add more steps as needed
+      {
+        id: 3,
+        title: "Poach the eggs",
+        description:
+          "Poach the eggs in simmering water for 3-4 minutes until cooked to your liking.",
+        image:
+          "https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      },
     ],
   },
   {
