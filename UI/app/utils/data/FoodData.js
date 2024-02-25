@@ -49,6 +49,68 @@ export const FoodData = [
       },
       // Add more steps as needed
     ],
+    comments: [
+      {
+        commentId: 1,
+        commentText: "These pancakes are amazing!",
+        time: "2024-02-25T12:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/3026808/pexels-photo-3026808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 2,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "commenter456",
+        },
+        likes: 10,
+        reports: 0,
+        replies: [
+          {
+            repId: 1,
+            repText: "I agree, they look delicious!",
+            time: "2024-02-25T13:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 3,
+              image:
+                "https://images.pexels.com/photos/3171128/pexels-photo-3171128.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "foodie789",
+            },
+          },
+        ],
+      },
+      {
+        commentId: 2,
+        commentText: "I can't wait to try making these pancakes!",
+        time: "2024-02-25T13:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 4,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "cookingfanatic123",
+        },
+        likes: 5,
+        reports: 0,
+        replies: [
+          {
+            repId: 2,
+            repText: "You won't be disappointed!",
+            time: "2024-02-25T14:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 5,
+              image:
+                "https://images.pexels.com/photos/3770002/pexels-photo-3770002.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "chefmaster789",
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     id: 2,
@@ -75,6 +137,7 @@ export const FoodData = [
         "I love this recipe!",
       ],
     },
+    comments: [],
     ingredients: [
       "1 ripe avocado",
       "2 eggs",
