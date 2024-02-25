@@ -1,5 +1,12 @@
-import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useRef } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AppVideo from "../components/AppVideo";
 import Screen from "../components/Screen";
 import { FoodData } from "../utils/data/FoodData";
@@ -10,14 +17,23 @@ import { Entypo } from "@expo/vector-icons";
 import { Tags } from "../utils/data/Tags";
 import Recommend from "../components/Recommend";
 import Card2 from "../components/Card2";
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import dayjs from "dayjs";
 const RecipeScreen = ({ route }) => {
   const { id } = route.params;
   console.log(id);
 
   // take this io the find the recipe with the id from foodData
   const recipe = FoodData.find((food) => food.id === id);
+  const CommentImages = recipe.comments?.filter((i) => i.commentImage);
   console.log(recipe);
-
+  const BottomRef = useRef(null);
+  const handlePresentModalPress = () => {
+    BottomRef.current.present();
+  };
+  const handleCloseModalPress = () => {
+    BottomRef.current.close();
+  };
   return (
     <Screen noSafeArea={true} className={"justify-center"}>
       <AppVideo />
@@ -69,7 +85,10 @@ const RecipeScreen = ({ route }) => {
       </View>
       <ListItemSeparator />
       <View className={"mx-5 my-3"}>
-        <TouchableOpacity className={"flex-row justify-between items-center"}>
+        <TouchableOpacity
+          className={"flex-row justify-between items-center"}
+          onPress={handlePresentModalPress}
+        >
           <View>
             <Text className={"text-lg font-semibold mb-2"}>Reviews</Text>
             <Text>103 comments- 35 pictures</Text>
@@ -172,6 +191,119 @@ const RecipeScreen = ({ route }) => {
           ))}
         </View>
       </View>
+
+      <BottomSheetModal ref={BottomRef} index={0} snapPoints={[650, 850]}>
+        <View className={"mx-5 my-3 pb-5"}>
+          <View className={"flex-row"}>
+            <View className={" flex-row items-center"}>
+              <TouchableOpacity>
+                <Ionicons name="camera-outline" color={colors.grey} size={30} />
+              </TouchableOpacity>
+              <TextInput
+                placeholder="Add a comment..."
+                multiline
+                className={"w-80 py-3 rounded-full mx-1 pl-5"}
+                style={{
+                  borderWidth: 1,
+                  borderColor: colors.grey,
+                }}
+              />
+              <TouchableOpacity>
+                <Ionicons name="send-sharp" color={colors.grey} size={23} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View className={"my-3 flex-row"}>
+            {CommentImages?.map((comment, index) => (
+              <View key={index}>
+                <Image
+                  source={{
+                    uri: comment?.commentImage,
+                  }}
+                  style={{
+                    width: 90,
+                    height: 90,
+                    borderRadius: 10,
+                  }}
+                  className={"mx-1"}
+                />
+                {index === 3 && (
+                  <View
+                    style={{
+                      width: 90,
+                      height: 90,
+                      position: "absolute",
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 10,
+                      marginLeft: 4,
+                    }}
+                  >
+                    <Text style={{ color: "#fff" }}>
+                      +{CommentImages.length - 4} more
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )).slice(0, 4)}
+          </View>
+
+          <View>
+            <ScrollView>
+              {recipe?.comments?.map((comment, index) => (
+                <View key={index} className={"my-3"}>
+                  <View className={""}>
+                    <View className={"ml-3"}>
+                      <View className={"flex-row items-center"}>
+                        <Image
+                          source={{
+                            uri: comment?.user?.image,
+                          }}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 50,
+                          }}
+                        />
+                        <View>
+                          <Text
+                            className={"font-semibold ml-2 italic  text-base"}
+                          >
+                            @{comment?.user.userName}
+                          </Text>
+                          <Text className={"text-grey ml-2 text-xs"}>
+                            {dayjs(comment?.time).format("YYYY-MM-DD")}
+                          </Text>
+                        </View>
+                      </View>
+                      <View className={"mx-4 mt-3"}>
+                        <Text className={"text-justify mb-4"}>
+                          {comment?.commentText}
+                        </Text>
+                        <Image
+                          source={{
+                            uri: comment?.commentImage,
+                          }}
+                          style={{
+                            width: "100%",
+                            height: 400,
+                            borderRadius: 10,
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View className={"flex-row items-center"}>
+                    <RatingStar value={comment?.rating} maxValue={5} />
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </BottomSheetModal>
     </Screen>
   );
 };

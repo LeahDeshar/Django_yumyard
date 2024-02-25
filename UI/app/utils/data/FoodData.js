@@ -23,12 +23,7 @@ export const FoodData = [
       ],
     },
     difficulty: "Easy",
-    ingredients: [
-      "1 cup almond flour",
-      "2 eggs",
-      "1/2 cup almond milk",
-      // Add more ingredients as needed
-    ],
+    ingredients: ["1 cup almond flour", "2 eggs", "1/2 cup almond milk"],
     nutritionPerServing: {
       calories: 250,
       protein: 10,
@@ -52,7 +47,8 @@ export const FoodData = [
     comments: [
       {
         commentId: 1,
-        commentText: "These pancakes are amazing!",
+        commentText:
+          "Having these pancakes with fresh berries is truly a delight. The burst of flavor from the juicy berries complements the fluffy pancakes perfectly. It's like a symphony of taste exploding in my mouth with every bite. I could eat these pancakes every day and never get tired of them. They're simply irresistible!   ",
         time: "2024-02-25T12:30:00Z",
         commentImage:
           "https://images.pexels.com/photos/3026808/pexels-photo-3026808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -76,6 +72,126 @@ export const FoodData = [
               image:
                 "https://images.pexels.com/photos/3171128/pexels-photo-3171128.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
               userName: "foodie789",
+            },
+          },
+        ],
+      },
+      {
+        commentId: 2,
+        commentText: "I can't wait to try making these pancakes!",
+        time: "2024-02-25T13:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 4,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "cookingfanatic123",
+        },
+        likes: 5,
+        reports: 0,
+        replies: [
+          {
+            repId: 2,
+            repText: "You won't be disappointed!",
+            time: "2024-02-25T14:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 5,
+              image:
+                "https://images.pexels.com/photos/3770002/pexels-photo-3770002.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "chefmaster789",
+            },
+          },
+        ],
+      },
+      {
+        commentId: 2,
+        commentText: "I can't wait to try making these pancakes!",
+        time: "2024-02-25T13:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 4,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "cookingfanatic123",
+        },
+        likes: 5,
+        reports: 0,
+        replies: [
+          {
+            repId: 2,
+            repText: "You won't be disappointed!",
+            time: "2024-02-25T14:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 5,
+              image:
+                "https://images.pexels.com/photos/3770002/pexels-photo-3770002.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "chefmaster789",
+            },
+          },
+        ],
+      },
+      {
+        commentId: 2,
+        commentText: "I can't wait to try making these pancakes!",
+        time: "2024-02-25T13:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 4,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "cookingfanatic123",
+        },
+        likes: 5,
+        reports: 0,
+        replies: [
+          {
+            repId: 2,
+            repText: "You won't be disappointed!",
+            time: "2024-02-25T14:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 5,
+              image:
+                "https://images.pexels.com/photos/3770002/pexels-photo-3770002.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "chefmaster789",
+            },
+          },
+        ],
+      },
+      {
+        commentId: 2,
+        commentText: "I can't wait to try making these pancakes!",
+        time: "2024-02-25T13:30:00Z",
+        commentImage:
+          "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        user: {
+          userId: 4,
+          image:
+            "https://images.pexels.com/photos/35666/cooking-baby-only-kitchen.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          userName: "cookingfanatic123",
+        },
+        likes: 5,
+        reports: 0,
+        replies: [
+          {
+            repId: 2,
+            repText: "You won't be disappointed!",
+            time: "2024-02-25T14:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/7218637/pexels-photo-7218637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 5,
+              image:
+                "https://images.pexels.com/photos/3770002/pexels-photo-3770002.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "chefmaster789",
             },
           },
         ],
