@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -31,8 +31,15 @@ const RecipeScreen = ({ route }) => {
   const handlePresentModalPress = () => {
     BottomRef.current.present();
   };
-  const handleCloseModalPress = () => {
-    BottomRef.current.close();
+
+  const [showReplies, setShowReplies] = useState(
+    Array(recipe?.comments?.length).fill(false)
+  );
+
+  const toggleReplies = (index) => {
+    const updatedShowReplies = [...showReplies];
+    updatedShowReplies[index] = !updatedShowReplies[index];
+    setShowReplies(updatedShowReplies);
   };
   return (
     <Screen noSafeArea={true} className={"justify-center"}>
@@ -250,53 +257,111 @@ const RecipeScreen = ({ route }) => {
             )).slice(0, 4)}
           </View>
 
-          <View>
-            <ScrollView>
+          <View className={"mb-5"}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className={" mb-72 "}
+            >
               {recipe?.comments?.map((comment, index) => (
                 <View key={index} className={"my-3"}>
-                  <View className={""}>
-                    <View className={"ml-3"}>
-                      <View className={"flex-row items-center"}>
-                        <Image
-                          source={{
-                            uri: comment?.user?.image,
-                          }}
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: 50,
-                          }}
-                        />
-                        <View>
-                          <Text
-                            className={"font-semibold ml-2 italic  text-base"}
-                          >
-                            @{comment?.user.userName}
-                          </Text>
-                          <Text className={"text-grey ml-2 text-xs"}>
-                            {dayjs(comment?.time).format("YYYY-MM-DD")}
-                          </Text>
-                        </View>
-                      </View>
-                      <View className={"mx-4 mt-3"}>
-                        <Text className={"text-justify mb-4"}>
-                          {comment?.commentText}
+                  <View className={"ml-3"}>
+                    <View className={"flex-row items-center"}>
+                      <Image
+                        source={{
+                          uri: comment?.user?.image,
+                        }}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 50,
+                        }}
+                      />
+                      <View>
+                        <Text
+                          className={"font-semibold ml-2 italic  text-base"}
+                        >
+                          @{comment?.user.userName}
                         </Text>
-                        <Image
-                          source={{
-                            uri: comment?.commentImage,
-                          }}
-                          style={{
-                            width: "100%",
-                            height: 400,
-                            borderRadius: 10,
-                          }}
-                        />
+                        <Text className={"text-grey ml-2 text-xs"}>
+                          {dayjs(comment?.time).format("YYYY-MM-DD")}
+                        </Text>
                       </View>
                     </View>
-                  </View>
-                  <View className={"flex-row items-center"}>
-                    <RatingStar value={comment?.rating} maxValue={5} />
+                    <View className={"mx-4 mt-3"}>
+                      <Text className={"text-justify mb-4"}>
+                        {comment?.commentText}
+                      </Text>
+                      <Image
+                        source={{
+                          uri: comment?.commentImage,
+                        }}
+                        style={{
+                          width: "100%",
+                          height: 400,
+                          borderRadius: 10,
+                        }}
+                      />
+                    </View>
+                    <View className={"flex-row  mx-4 mt-3"}>
+                      <TouchableOpacity
+                        className={"flex-row items-center mr-6"}
+                      >
+                        <Ionicons
+                          name="heart"
+                          size={24}
+                          color={colors.primary}
+                        />
+                        <Text className={"ml-2"}>{comment?.likes}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        className={"flex-row items-center"}
+                        onPress={() => toggleReplies(index)}
+                      >
+                        <Ionicons
+                          name="chatbubble-ellipses"
+                          size={24}
+                          color={colors.primary}
+                        />
+                        <Text className={"ml-2"}>
+                          {comment?.replies.length}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      {showReplies[index] && (
+                        <View>
+                          {comment?.replies.map((reply, replyIndex) => (
+                            <View key={replyIndex} className={"ml-6 my-3"}>
+                              <View className={"flex-row items-center"}>
+                                <Image
+                                  source={{
+                                    uri: reply?.user?.image,
+                                  }}
+                                  style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 50,
+                                  }}
+                                />
+                                <View>
+                                  <Text
+                                    className={
+                                      "font-semibold ml-2 italic  text-base"
+                                    }
+                                  >
+                                    @{reply?.user.userName}
+                                  </Text>
+                                  <Text className={"text-grey ml-2 text-xs"}>
+                                    {dayjs(reply?.time).format("YYYY-MM-DD")}
+                                  </Text>
+                                </View>
+                              </View>
+                              <Text className={" ml-12"}>{reply.repText}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      )}
+                    </View>
                   </View>
                 </View>
               ))}

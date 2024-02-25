@@ -74,6 +74,19 @@ export const FoodData = [
               userName: "foodie789",
             },
           },
+          {
+            repId: 1,
+            repText: "I agree, they look delicious!",
+            time: "2024-02-25T13:00:00Z",
+            repImage:
+              "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            user: {
+              userId: 3,
+              image:
+                "https://images.pexels.com/photos/3171128/pexels-photo-3171128.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              userName: "foodie789",
+            },
+          },
         ],
       },
       {
