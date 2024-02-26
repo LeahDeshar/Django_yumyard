@@ -11,23 +11,35 @@ import React from "react";
 import { FoodData } from "../utils/data/FoodData";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
-const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
+const Recommend = ({
+  title,
+  isYumyard = false,
+  isGuided = false,
+  isHorizontal = true,
+}) => {
   const navigation = useNavigation();
   return (
     <View>
-      <View className={"flex-row justify-between items-center mt-3 mx-5"}>
-        <Text className={"text-prim font-semibold text-2xl my-5"}>{title}</Text>
-        <TouchableOpacity>
-          <Text className={"text-prim"}> View All</Text>
-        </TouchableOpacity>
-      </View>
+      {isHorizontal && (
+        <View className={"flex-row justify-between items-center mt-3 mx-5"}>
+          <Text className={"text-prim font-semibold text-2xl my-5"}>
+            {title}
+          </Text>
+          <TouchableOpacity>
+            <Text className={"text-prim"}> View All</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <View className={"mx-5"}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          horizontal={isHorizontal}
+          showsHorizontalScrollIndicator={false}
+        >
           {FoodData.map((food, index) => (
             <TouchableOpacity
               key={index}
-              className={"mr-6"}
+              className={`mr-6 ${!isHorizontal && "my-3"}`}
               style={{
                 backgroundColor: colors.white,
                 shadowColor: "#00000055",
@@ -48,7 +60,7 @@ const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
                 source={food.image}
                 style={{
                   height: isGuided ? 250 : 410,
-                  width: 300,
+                  width: isHorizontal ? 300 : "100%",
                   borderRadius: 15,
                 }}
               />
@@ -56,7 +68,7 @@ const Recommend = ({ title, isYumyard = false, isGuided = false }) => {
                 style={{
                   backgroundColor: "#00000051",
                   height: isGuided ? 250 : 410,
-                  width: 300,
+                  width: isHorizontal ? 300 : "100%",
                   // top: 220,
                   borderRadius: 15,
                   position: "absolute",

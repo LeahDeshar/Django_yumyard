@@ -15,7 +15,13 @@ const CategoryDetailScreen = ({ route }) => {
       <Text className={"mx-3 font-semibold text-2xl mt-5 text-center mb-2"}>
         {subcategory.name}
       </Text>
-      <Recommend title={"Guided Recipes"} isGuided={true} />
+      <View>
+        <Recommend
+          isHorizontal={false}
+          title={"Guided Recipes"}
+          isGuided={true}
+        />
+      </View>
     </Screen>
   );
 };
