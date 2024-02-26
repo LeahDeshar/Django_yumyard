@@ -23,6 +23,7 @@ import Recommend from "../components/Recommend";
 import Card2 from "../components/Card2";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import dayjs from "dayjs";
+import AppButton from "../components/AppButton";
 const RecipeScreen = ({ route }) => {
   const { id } = route.params;
   console.log(id);
@@ -213,7 +214,13 @@ const RecipeScreen = ({ route }) => {
               <Text className={"font-semibold text-lg"}>{step?.title}</Text>
               <Text>{step?.description}</Text>
             </View>
-            <Button title="Set Timer" onPress={() => setModalVisible(true)} />
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              className={"flex-row items-center"}
+            >
+              <Ionicons name="timer-outline" size={24} color={colors.primary} />
+              <Text className={"ml-2"}>Set Timer</Text>
+            </TouchableOpacity>
             <TimerModal
               isVisible={modalVisible}
               onClose={() => setModalVisible(false)}
@@ -493,12 +500,14 @@ const TimerModal = ({ isVisible, onClose, onStart }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContentOuter}>
+          <Text className={"font-semibold text-center text-xl mt-5"}>
+            TIMER
+          </Text>
           <View style={styles.modalContent}>
             <View>
               <Text style={styles.label}>HOUR</Text>
               <Picker
                 style={styles.picker}
-                // selectionColor={"#000"}
                 itemStyle={{ color: colors.primary }}
                 selectedValue={hours}
                 onValueChange={(itemValue) => setHours(itemValue)}
@@ -517,6 +526,7 @@ const TimerModal = ({ isVisible, onClose, onStart }) => {
               <Picker
                 style={styles.picker}
                 selectedValue={minutes}
+                itemStyle={{ color: colors.primary }}
                 onValueChange={(itemValue) => setMinutes(itemValue)}
               >
                 {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
@@ -532,6 +542,7 @@ const TimerModal = ({ isVisible, onClose, onStart }) => {
               <Text style={styles.label}>SECONDS</Text>
               <Picker
                 style={styles.picker}
+                itemStyle={{ color: colors.primary }}
                 selectedValue={seconds}
                 onValueChange={(itemValue) => setSeconds(itemValue)}
               >
@@ -546,8 +557,19 @@ const TimerModal = ({ isVisible, onClose, onStart }) => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={onClose} />
-            <Button title="Start" onPress={handleStart} />
+            <AppButton
+              textColor={"text-grey"}
+              color="bg-white"
+              title="Cancel"
+              onPress={onClose}
+              className={"mr-9"}
+            />
+            <AppButton
+              textColor={"text-prim"}
+              color="bg-white"
+              title="Start"
+              onPress={handleStart}
+            />
           </View>
         </View>
       </View>
@@ -560,7 +582,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   modalContent: {
     flexDirection: "row",
@@ -585,7 +607,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
+    justifyContent: "flex-end",
+    right: 30,
   },
 });
