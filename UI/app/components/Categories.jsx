@@ -28,6 +28,9 @@ const Categories = ({ horizontal = true, isExplore = false }) => {
         {CategoryData?.map((category, index) => (
           <TouchableOpacity
             key={index}
+            onPress={() =>
+              navigation.navigate("CategoryScreen", { id: category.id })
+            }
             className={`mr-6 bg-white pl-5 flex-row items-center justify-between rounded-xl ${
               !horizontal && "my-2 py-1"
             }`}

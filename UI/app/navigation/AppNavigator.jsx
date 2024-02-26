@@ -10,6 +10,8 @@ import Login from "../screens/Login";
 import Test from "../screens/Test";
 import EditProfile from "../screens/EditProfile";
 import RecipeScreen from "../screens/RecipeScreen";
+import CategoryScreen from "../screens/CategoryScreen";
+import CategoryDetailScreen from "../screens/CategoryDetailScreen";
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator();
@@ -27,6 +29,9 @@ export default function AppNavigator() {
       <Stack.Screen component={Login} name={"Login"} />
       <Stack.Screen component={Test} name={"Test"} />
       <Stack.Screen component={RecipeScreen} name={"recipedetails"} />
+      <Stack.Screen component={CategoryScreen} name={"CategoryScreen"} />
+      <Stack.Screen component={CategoryDetailScreen} name={"CategoryDetail"} />
+
       <Stack.Screen
         component={EditProfile}
         name={"Edit"}
