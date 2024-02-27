@@ -10,12 +10,15 @@ import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppTextInput from "../components/AppTextInput";
 import AppText from "../components/AppText";
+import { useNavigation } from "@react-navigation/native";
 const Header = () => {
   const [searchText, setSearchText] = useState("");
   //funciotn for search
+  const navigation = useNavigation();
   const handleSearch = () => {
-    console.log(searchText);
-    setSearchText("");
+    navigation.navigate("Search");
+    // console.log(searchText);
+    // setSearchText("");
   };
   return (
     <View>
@@ -25,6 +28,7 @@ const Header = () => {
       />
       <View className={" absolute top-20 mt-2 left-8 "}>
         <View className={"flex-row items-center   "}>
+          <TouchableOpacity onPress={handleSearch}>
           <AppTextInput
             // noBorder
             placeholder="Search"
@@ -32,6 +36,7 @@ const Header = () => {
             materialIcons
             className={"w-80 mr-2"}
           />
+          </TouchableOpacity>
           <Image
             source={require("../assets/driverAvatar.png")}
             style={{

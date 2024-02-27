@@ -1,18 +1,29 @@
-import { View, StyleSheet, Button, Text } from "react-native";
-import React from "react";
+import { View, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import AppTextInput from "../components/AppTextInput";
 
 const Test = () => {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      console.log("focus");
+      inputRef.current.focus();
+    }
+  }, []);
   return (
     <View>
-      <Text>Text</Text>
+      <View className={"mt-20 items-center   "}>
+        <AppTextInput
+          ref={inputRef}
+          // noBorder
+          placeholder="Search"
+          icon="search"
+          materialIcons
+          className={" w-80 mx-10 mr-2"}
+        />
+      </View>
     </View>
   );
 };
 
 export default Test;
-const styles = StyleSheet.create({
-  video: {
-    width: "100%",
-    height: 300, // Adjust height as needed
-  },
-});
