@@ -44,6 +44,8 @@ const Test = () => {
           />
           <Text>{randomData?.name}</Text>
         </View>
+
+        <View></View>
       </View>
     </Screen>
   );
