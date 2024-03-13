@@ -13,7 +13,9 @@ import colors from "../config/colors";
 import { Food1Data } from "../utils/data/Food1Data";
 import { Article } from "../utils/data/Article";
 import { ListItemSeparator } from "./lists";
+import { useNavigation } from "@react-navigation/native";
 const Card3 = ({ title, isPro = false, isGuided = false }) => {
+  const navigation = useNavigation();
   return (
     <View className={"mb-4"}>
       <View className={"flex-row justify-between items-center mt-3 mx-5"}>
@@ -26,7 +28,10 @@ const Card3 = ({ title, isPro = false, isGuided = false }) => {
       <View className={"mx-6"}>
         <ScrollView>
           {Article.map((food, index) => (
-            <TouchableOpacity key={index}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => navigation.navigate("blog", { id: food.id })}
+            >
               <View className={"flex-row mb-3 mt-2"}>
                 <Image
                   source={food.image}

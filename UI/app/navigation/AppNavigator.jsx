@@ -12,6 +12,7 @@ import EditProfile from "../screens/EditProfile";
 import RecipeScreen from "../screens/RecipeScreen";
 import CategoryScreen from "../screens/CategoryScreen";
 import CategoryDetailScreen from "../screens/CategoryDetailScreen";
+import BlogScreen from "../screens/BlogScreen";
 
 export default function AppNavigator() {
   const Stack = createNativeStackNavigator();
@@ -27,6 +28,7 @@ export default function AppNavigator() {
       <Stack.Screen component={HomeTabNavigator} name={"home"} />
       <Stack.Screen component={Register} name={"Register"} />
       <Stack.Screen component={Login} name={"Login"} />
+      <Stack.Screen component={BlogScreen} name={"blog"} />
       <Stack.Screen component={Test} name={"Test"} />
       <Stack.Screen component={RecipeScreen} name={"recipedetails"} />
       <Stack.Screen component={CategoryScreen} name={"CategoryScreen"} />

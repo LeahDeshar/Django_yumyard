@@ -32,7 +32,7 @@ const AppVideo = () => {
       <Video
         ref={video}
         style={styles.video}
-        source={require("../assets/videos/1.mp4")}
+        source={require("../assets/videos/pancake.mp4")}
         resizeMode={ResizeMode.COVER}
         onError={(error) => console.log("Video playback error:", error)}
         // shouldPlay
