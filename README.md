@@ -22,7 +22,3 @@ YumYard comes with the following features:
 - **Backend**: Django, Django REST Framework
 - **Frontend**: ReactJS, Redux Toolkit
 - **Database**: MySql
-
-Don't copy! I will haunt you 👻
-
-
